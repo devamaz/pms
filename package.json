@@ -1,0 +1,11 @@
+{
+  "name": "pms",
+  "version": "1.0.0",
+  "description": "Project work on online crime reporting system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victory Osikwemhe <zombieleetnca@gmail.com>",
+  "license": "MIT"
+}

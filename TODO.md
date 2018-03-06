@@ -1,18 +1,20 @@
-    #Categories of Crime
-    
+#### Categories of Crime
+
         Armed robbery, kidnap, drug trafficking, sex trafficking, illegal gun running and lots of others.
         Homicide: murder
 
 
-    #USERS MODULE
+#### USERS MODULE
+
     [] User Login / Register
     [] Dashboard
         [] report crime
         [] update profile
         [] previous crime report
-    
-    #ADMINISTRATOR MODULE
-    [] Register a criminal
+
+#### ADMINISTRATOR MODULE
+
+     [] Register a criminal
         [] Webcam ( to capture criminal photos )
         [] Finger Printing ( to capture the criminal finger print)
 
