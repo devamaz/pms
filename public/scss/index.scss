@@ -1,0 +1,70 @@
+@import "reset.scss";
+@import "button.scss";
+
+header {
+    border: 1px solid white;
+    box-shadow: 3px 3px 3px darken(white,40%);
+    padding-bottom: 50px;
+    padding-top: 10px;
+    #nav-parent {
+        display: flex;
+        float: left;
+        width: 40%;
+        .nav-item {
+            list-style: none;
+            padding: 12px;
+            box-shadow: 2px 0px 16px -6px #999999;
+            cursor: pointer;
+            margin-top: -12px;
+            display: flex;
+            a {
+                align-self: center;
+            }
+            &:hover {
+                a {
+                    color: lighten(black, 50%);
+                }
+            }
+        }
+        .nav-item:first-of-type {
+            box-shadow: initial;
+            margin-top: 10px;
+            display: initial;
+            a {
+                background: url("/assets/police_logo.jpeg") center no-repeat;
+                padding: 50px;
+                border: none;
+                background-blend-mode: multiply;
+            }
+        }
+    }
+    #access {
+        display: flex;
+        float: right;
+        justify-content: flex-end;
+        //border: 2px solid blue;
+        margin-right: 70px;
+        //margin-top: 12px;
+        input {
+            padding: 10px;
+            margin-left: 5px;
+            border: 1px solid darken(white,40%);
+            border-radius: 10px;
+        }
+
+        .login-btn {
+            margin-left: 5px;
+            @extend %buttons;
+        }
+
+        .reg-btn {
+            margin-left: 12px;
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+                color: lighten(black,40%);
+            }
+        }
+    }
+}
+
