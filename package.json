@@ -1,11 +1,25 @@
 {
-  "name": "pms",
-  "version": "1.0.0",
-  "description": "Project work on online crime reporting system",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Victory Osikwemhe <zombieleetnca@gmail.com>",
-  "license": "MIT"
+    "name": "pms",
+    "version": "1.0.0",
+    "description": "Project work on online crime reporting system",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "/usr/local/bin/nodemon ."
+    },
+    "author": "Victory Osikwemhe <zombieleetnca@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "compression": "^1.7.2",
+        "dotenv": "^5.0.1",
+        "express": "^4.16.2",
+        "express-compile-sass": "^4.0.0",
+        "express-fileupload": "^0.4.0",
+        "express-session": "^1.15.6",
+        "mongodb": "^3.0.4",
+        "node-sass": "^4.7.2",
+        "pug": "^2.0.0",
+        "serve-favicon": "^2.4.5"
+    }
 }
