@@ -6,21 +6,4 @@ html
     link(rel="stylesheet" href="../scss/index.scss")
 
   body
-    header
-      nav#nav-parent
-        li.nav-item
-          a(href="/")
-            //- img(src="/assets/police_logo.jpeg" alt="police logo" height="30" width="50")
-        li.nav-item
-          a(href="/") Home
-        li.nav-item
-          a(href="/about") About
-      div#access
-        form.user-login-reg
-
-          input(type="text" placeholder="username" required)
-          input(type="password" placeholder="password" required)
-
-          button(class="login-btn") Login
-
-          a(class="reg-btn") Register
+    include nav.pug
