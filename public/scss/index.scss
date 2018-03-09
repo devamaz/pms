@@ -1,6 +1,10 @@
 @import "reset.scss";
 @import "button.scss";
 
+body {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
 header {
     border: 1px solid white;
     box-shadow: 3px 3px 3px darken(white,40%);
@@ -60,6 +64,7 @@ header {
         .reg-btn {
             margin-left: 12px;
             cursor: pointer;
+            vertical-align: -webkit-baseline-middle;
             &:hover {
                 text-decoration: underline;
                 color: lighten(black,40%);
@@ -68,3 +73,130 @@ header {
     }
 }
 
+#banner {
+    height: auto;
+    .banner-img-container {
+        opacity: .75;
+        img {
+            height: 800px;
+            width: 100%;
+        }
+    }
+    .banner-text-container {
+        margin-top: -590px;
+        p {
+            text-align: center;
+            font-weight: bolder;
+            font-size: 5em;
+            font-family: monospace;
+            font-variant: small-caps;
+            opacity: .76;
+            line-height: 1.5;
+            &.motto {
+                font-family: initial;
+                font-size: 1.3em;
+                font-style: italic;
+            }
+        }
+        
+    }
+}
+
+/* [data-anim="on"] {
+   animation-name: policeAnimate;
+   animation-delay: .5s;
+   animation-duration: 1s;
+   animation-timing-function: ease-in-out;
+   animation-fill-mode: forwards;    
+   }
+
+   [data-anim="off"] {
+   animation-name: policeAnimateDiffuse;
+   animation-delay: 1s;
+   animation-duration: 1s;
+   animation-timing-function: ease-in-out;
+   animation-fill-mode: forwards;
+   }
+
+   @keyframes policeAnimate {
+   10% {
+   opacity: .1;
+   },
+   20% {
+   opacity: .10;
+   },
+   30% {
+   opacity: .15;
+   },
+   40% {
+   opacity: .20;
+   },
+   50% {
+   opacity: .25;
+   },
+   60% {
+   opacity: .30;
+   },
+   75% {
+   opacity: .35;
+   }
+   80% {
+   opacity: .40;
+   },
+   90% {
+   opacity: .45;
+   },
+   100% {
+   opacity: 1;
+   }
+   
+   }
+
+
+   @keyframes policeAnimateDiffuse {
+   10% {
+   opacity: 1;
+   },
+   20% {
+   opacity: .80;
+   },
+   30% {
+   opacity: .75;
+   },
+   40% {
+   opacity: .70;
+   },
+   50% {
+   opacity: .65;
+   },
+   60% {
+   opacity: .60;
+   },
+   75% {
+   opacity: .55;
+   }
+   80% {
+   opacity: .50;
+   },
+   90% {
+   opacity: .45;
+   },
+   100% {
+   opacity: 0;
+   }
+   
+   } */
+
+.err {
+    color: red;
+    text-align: center;
+}
+
+.nav-item {
+    list-style: none;
+    margin-top: 12px;
+    &:hover {
+        text-decoration: underline;
+        color: lighten(white, 40%);
+    }
+}

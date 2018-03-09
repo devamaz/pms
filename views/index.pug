@@ -1,9 +1,8 @@
-doctype html5
 
-html
-  head
-    title Police Management System
-    link(rel="stylesheet" href="../scss/index.scss")
+extends ./head.pug
 
-  body
-    include nav.pug
+block content
+  include nav.pug
+  include banner.pug
+    
+  script(src="/js/index.js")
