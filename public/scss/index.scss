@@ -200,3 +200,24 @@ header {
         color: lighten(white, 40%);
     }
 }
+
+.crime {
+    border: 2px solid red;
+    padding: 10px;
+    padding-bottom: 3px;
+    border-radius: 50%;
+    margin-right: 12px;
+    background: lighten(red,20%);
+    box-shadow: 1px 1px 1px lighten(red,20%);
+    font-weight: bolder;
+    &:hover {
+        text-decoration: none;
+    }
+    .reported_crimes {
+        text-align: center;
+        display: flex;
+        margin-top: -3px;
+        color: white;
+        text-shadow: 1px 1px 1px white;
+    }
+}

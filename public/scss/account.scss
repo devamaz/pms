@@ -1,0 +1,90 @@
+@import "button.scss";
+
+#asides {
+    .user-nav-aside {
+        display: inline-flex;
+        width: 200px;
+        background: black;
+        height: 1000px;
+        .user-nav-item {
+            list-style: none;
+            width: 196.555px;
+            margin-top: 25px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            &:hover {
+                a {
+                    color: darken(white,25%);
+                }
+            }
+            a {
+                color: darken(white,40%);
+                font-size: 22px;
+                display: flex;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+        .user-nav-item.active {
+            background: darken(white,70%);
+        }
+    }
+}
+
+
+#second_aside {
+    float: right;
+    width: 70%;
+    margin-right: 200px;
+    margin-top: 25px;
+    overflow-y: auto;
+}
+
+.report_crime {
+    padding: 9px;
+    p {
+        font-weight: bolder;
+        font-style: italic;
+        text-align: center;
+        font-size: 25px;
+    }
+    div {
+        margin: 40px;
+        margin-top: 20px;
+        span {
+            font-size: 20px;
+            font-family: sans-serif;
+        }
+        input {
+            @extend %input;
+        }
+        select {
+            @extend %input;
+            background: white;
+            margin-left: 90px;
+        }
+        button {
+            @extend %buttons;
+            margin-top: -20px;
+        }
+        .crime-btn-reset {
+            margin-left: 15px;
+        }
+    }
+}
+
+.report_name:last-of-type {
+    margin-left: 25px;
+}
+
+.report_address {
+    input {
+        width: 600px;
+    }
+}
+
+.crime_location {
+    input {
+        width: 700px;
+    }
+}

@@ -9,3 +9,13 @@
         color: darken(white,10%);
     }
 }
+
+%input {
+    margin-left: 20px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid darken(white,40%);
+    &:disabled {
+        cursor: not-allowed;
+    }
+}

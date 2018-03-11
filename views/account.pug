@@ -1,0 +1,11 @@
+extends head.pug
+
+append link
+  link(rel="stylesheet" href="/scss/account.scss")
+
+block content
+  include nav.pug
+  section#asides
+    block asides
+      include sidebar.pug
+  script(src="/js/account.js")

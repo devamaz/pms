@@ -1,0 +1,46 @@
+extends account.pug
+
+append asides
+  aside#second_aside.report_crime
+    p Provided information will be kept for record purposes
+    form(method="POST")
+      div.report_cred
+        label.report_name
+          span Reporter First Name
+          input(type="text" value=userCred.firstName disabled)
+        label.report_name
+          span Reporter Last Name
+          input(type="text" value=userCred.lsatName disabled)
+      div.report_location
+        label.report_address
+          span Reporter First Address
+          input(type="text" value=userCred.addresOne disabled)
+          
+      div.report_location
+        label.report_address
+          span Reporter Second Address
+          input(type="text" value=userCred.addressTwo disabled)
+          
+      div.upload_image_proof
+        label.upload_image
+          span Crime Scene Image
+          input(type="file" name="crime_scene_image" required)
+          
+      div.upload_video_proof
+        label.upload_video
+          span Crime Scene Video
+          input(type="file" name="crime_scene_video" required)
+      
+      div.crime_nature
+        label.crime_type
+          span Crime Type
+          select(name="crime_type" required)
+            each item in crimeType
+              option(value=item.type)= item.type
+      div.crime_locale
+        label.crime_location
+          span Crime Location
+          input(type="text" name="crime_location" required)
+      div.crime_button
+        button(class="crime-btn-submit" type="submit") Submit
+        button(class="crime-btn-reset" type="reset") Reset

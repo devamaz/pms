@@ -4,6 +4,11 @@ const index = express.Router();
 
 
 index.get("/", (req,res) => {
+    if ( req.session.logedIn ) {
+        console.log(req.session);
+        res.status(200).render("index", { succ: true } );
+        return ;
+    }
     res.status(200)
         .render("index");
 });
@@ -17,17 +22,20 @@ index.post("/", (req,res) => {
     users.findOne({ username },  (err,result) => {
         
         if ( err ) {
-            res.render("index", { err: "Unexpected Error, You Cannot Login now" });
+            res.status(200).render("index", { err: "Unexpected Error, You Cannot Login now" });
             return ;
         }
 
         if ( ! result ) {
-            res.render("index", { err: `Invalid Username and/or Password`});
+            res.status(200).render("index", { err: `Invalid Username and/or Password`});
             return; 
         }
 
         if ( result.username === username && result.password === passwordHash ) {
-            res.render("index", { succ: true });
+            req.session.logedIn = true;
+            delete result.password;
+            req.session.userCred = result;
+            res.status(200).render("index", { succ: true });
             return ;
         }
 
