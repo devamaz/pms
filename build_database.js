@@ -12,11 +12,12 @@ db.createCollection("users");
 db.createCollection("crimelist");
 db.createCollection("admin");
 db.createCollection("police.officer");
-db.createCollection("users.cases");
+db.createCollection("reportedcrimes");
 
 
-db.users.createIndex({ username: 1, bvn: 1 });
-db.police.officers.createIndex( { serviceNumber: 1 } );
+
+db.users.createIndex({ username: 1, bvn: 1 }, { unique: true });
+db.police.officers.createIndex( { serviceNumber: 1 } , { unique: true } );
 
 db.crimelist.insertMany([
     {

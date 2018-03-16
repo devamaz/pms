@@ -60,7 +60,7 @@ app.use(favicon(path.join(__dirname, "public", "assets", "police_logo.jpeg")));
 app.use(async (req,res,next) => {
     
     if ( req.session.logedIn ) {
-        
+        console.log(req.session);
         res.locals.succ = true;
         res.locals.userCred = req.session.userCred;
         

@@ -1,5 +1,6 @@
 @import "button.scss";
 
+
 #asides {
     .user-nav-aside {
         display: inline-flex;
@@ -34,13 +35,14 @@
 
 #second_aside {
     float: right;
-    width: 70%;
+    width: 1000px;
     margin-right: 200px;
     margin-top: 25px;
     overflow-y: auto;
 }
 
-.report_crime {
+.report_crime,
+.aside_class {
     padding: 9px;
     p {
         font-weight: bolder;
@@ -87,4 +89,40 @@
     input {
         width: 700px;
     }
+}
+
+
+.previous_crime {
+    > p {
+        margin-left: 85px;
+    }
+}
+
+.crimelist {
+    display: flex;
+    justify-content: center;
+    .crime_list_item {
+        display: inline-block;
+        width: 250px;
+        border: 2px solid black;
+        padding: 25px;
+        margin: 12px;
+        box-shadow: 0px 0px 4px -1px black;
+        margin-top: 25px;
+        > p {
+            font-weight: initial;
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+        &:first-of-type {
+            margin-left: 100px;
+        }
+    }
+    
+}
+
+.showMore {
+    @extend %buttons;
+    margin-left: 520px;
+    margin-top: 25px;
 }

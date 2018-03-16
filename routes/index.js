@@ -4,13 +4,7 @@ const index = express.Router();
 
 
 index.get("/", (req,res) => {
-    if ( req.session.logedIn ) {
-        console.log(req.session);
-        res.status(200).render("index", { succ: true } );
-        return ;
-    }
-    res.status(200)
-        .render("index");
+    res.status(200).render("index");
 });
 
 index.post("/", (req,res) => {

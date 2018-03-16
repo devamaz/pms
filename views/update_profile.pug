@@ -3,3 +3,55 @@ extends account.pug
 
 append asides
   aside#second_aside.update_profile
+    form(method="POST" action="/register")
+      p.err= regerr
+      div.picture
+        label.upload-picture
+          p Upload Photo
+          div.preview-picture
+          input(type="file" name="picture" required)
+
+      div.name-fields
+
+        label.first-name
+          span.required First Name
+          input(type="text" name="firstName" placeholder="input first name" required)
+
+        label.last-name
+          span.required Last Name
+          input(type="text" name="lsatName" placeholder="input last name" required)
+
+      div.address
+        label.address-one
+          span.required Address One
+          input(type="text" name="addresOne" placeholder="Add Address" required)
+
+      div.address
+        label.address-two
+          span.required Address Two
+          input(type="text" name="addressTwo" placeholder="Add Second Address" required)
+
+      div.number
+        label.phone-number
+          span.required Phone Number
+          input(type="telephone" name="phoneNumber" required)
+
+      div.date-of-birth
+        label.dob
+          span.required Date Of Birth
+          input(type="date" name="dob" required)
+
+
+      div.login-pwd
+        label.user-new_password
+          span.required New Password
+          input(type="password" name="new_password" class="new_password" required)
+
+      div.confirm-pwd
+        label.user-old_password
+          span.required Old Password
+          input(type="password" name="old_password" class="old_password" required)
+
+      div.btn-handler
+        button.submit Update Profile
+        button(type="reset" class="reset")  Reset

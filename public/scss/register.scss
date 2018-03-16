@@ -1,4 +1,5 @@
 @import "button.scss";
+
 body {
     overflow-y: auto;
 }
@@ -8,16 +9,18 @@ body {
     padding: 30px;
     font-size: 20px;
     font-family: sans-serif;
-    form {
-        margin-left: 50px;
-        > div {
-            padding: 20px;
-            label {
-                input {
-                    @extend %input;
-                }
-                input[type="file"] {
-                    margin-left: 0;
+    @at-root {
+        form {
+            margin-left: 50px;
+            > div {
+                padding: 20px;
+                label {
+                    input {
+                        @extend %input;
+                    }
+                    input[type="file"] {
+                        margin-left: 0;
+                    }
                 }
             }
         }
