@@ -7,7 +7,7 @@ append link
 block content
   include nav.pug
   section#reg-form
-    form(method="POST" action="/register")
+    form(method="POST" action="/register" enctype="multipart/form-data")
       p.err= regerr
       div.picture
         label.upload-picture
@@ -23,7 +23,7 @@ block content
 
         label.last-name
           span.required Last Name 
-          input(type="text" name="lsatName" placeholder="input last name" required)
+          input(type="text" name="lastName" placeholder="input last name" required)
 
       div.address
         label.address-one
@@ -61,10 +61,10 @@ block content
           span.required Date Of Birth 
           input(type="date" name="dob" required)
 
-      div.tmb
-        label.thumb-print
-          span.required Thumb Print 
-          div.tmb-print
+      //- div.tmb
+      //-   label.thumb-print
+      //-     span.required Thumb Print 
+      //-     div.tmb-print
           
       div.login-name
         label.user-username
