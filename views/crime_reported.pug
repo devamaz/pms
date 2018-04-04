@@ -3,12 +3,13 @@ extends account.pug
 append asides
   aside#second_aside.aside_class.previous_crime
     p Previous Reported Crime
+    if ( no_crime )
+      p.noCrime= no_crime
     ul.crimelist
-      if ( ! crerr )
+      if ( ! crerr && ! no_crime )
         each value in crime
           li.crime_list_item
             p.date Date Reported:  #{value.crimes.crime_date}
             p.location Location Of Crime: #{value.crimes.crime_location}
             p.type Crime Type:  #{value.crimes.crime_type}
-
-    button.showMore More
+    //button.showMore More
