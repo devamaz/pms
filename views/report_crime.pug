@@ -3,14 +3,14 @@ extends account.pug
 append asides
   aside#second_aside.aside_class.report_crime
     p Provided information will be kept for record purposes
-    form(method="POST")
+    form(method="POST" enctype="multipart/form-data")
       div.report_cred
         label.report_name
           span Reporter First Name
           input(type="text" value=userCred.firstName disabled)
         label.report_name
           span Reporter Last Name
-          input(type="text" value=userCred.lsatName disabled)
+          input(type="text" value=userCred.lastName disabled)
       div.report_location
         label.report_address
           span Reporter First Address
@@ -24,12 +24,12 @@ append asides
       div.upload_image_proof
         label.upload_image
           span Crime Scene Image
-          input(type="file" name="crime_scene_image" required)
+          input(type="file" name="crime_scene_image" required multiple)
           
       div.upload_video_proof
         label.upload_video
           span Crime Scene Video
-          input(type="file" name="crime_scene_video" required)
+          input(type="file" name="crime_scene_video" required multiple)
       
       div.crime_nature
         label.crime_type
@@ -41,6 +41,10 @@ append asides
         label.crime_location
           span Crime Location
           input(type="text" name="crime_location" required)
+      div.crime_content
+        label.crime_content
+          span Brief Information of Crime Scene
+          textarea(type="content" name="content" required)
       div.crime_button
         button(class="crime-btn-submit" type="submit") Submit
         button(class="crime-btn-reset" type="reset") Reset
