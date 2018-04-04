@@ -27,8 +27,8 @@ index.post("/", (req,res) => {
 
         if ( result.username === username && result.password === passwordHash ) {
             req.session.logedIn = true;
-            delete result.password;
-            req.session.userCred = result;
+            delete req.body.password;
+            req.session.userCred = req.body;
             res.status(200).render("index", { succ: true });
             return ;
         }
