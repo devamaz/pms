@@ -11,11 +11,55 @@
 }
 
 %input {
-    margin-left: 20px !important;
+    margin-left: 20px;
     padding: 10px;
     border-radius: 12px;
     border: 1px solid darken(white,40%);
     &:disabled {
         cursor: not-allowed;
+    }
+}
+
+%preview-picture {
+    .preview-picture {
+        height: 150px;
+        width: 15%;
+        border: 2px solid black;
+    }
+    input {
+        margin-top: 12px;
+    }
+}
+
+%last-name {
+    .last-name {
+        span {
+            margin-left: 20px;
+        }
+    }
+}
+
+%address {
+    .address {
+        input {
+            width: 50%;
+        }
+    }
+}
+
+%reg-update-form {
+    form {
+        margin-left: 50px;
+        > div {
+            padding: 20px;
+            label {
+                input {
+                    @extend %input;
+                }
+                input[type="file"] {
+                    margin-left: 0;
+                }
+            }
+        }
     }
 }
