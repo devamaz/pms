@@ -7,12 +7,14 @@ const compression = require("compression");
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo")(expressSession);
 const bodyParser = require("body-parser");
+const expressFileUpload = require("express-fileupload");
 const path = require("path");
 const admin = require("./routes/admin.js");
 const user = require("./routes/user.js");
 const index = require("./routes/index.js");
 const register = require("./routes/register.js");
 const account = require("./routes/account.js");
+
 const app = express();
 
 const dotenv = require("dotenv").config();
@@ -24,10 +26,16 @@ const {
     SECRET: secret
 } = process.env;
 
+const mongoClient = async () => await mongodb(
+    `mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}/pms`
+);
+
+app.use(expressFileUpload({
+    safeFileNames: true
+}));
+
 app.use(async (req,res,next) => {
-    req.mongoClient = await mongodb(
-        `mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}/pms`
-    );
+    req.mongoClient = await mongoClient();
     req.db = req.mongoClient.db("pms");
     next();
 });
@@ -60,7 +68,6 @@ app.use(favicon(path.join(__dirname, "public", "assets", "police_logo.jpeg")));
 app.use(async (req,res,next) => {
     
     if ( req.session.logedIn ) {
-        console.log(req.session);
         res.locals.succ = true;
         res.locals.userCred = req.session.userCred;
         
@@ -118,6 +125,11 @@ app.use( (err,req,res ) => {
     });
 });
 
+process.on("UnhandledPromiseReject", err => {
+    console.log(err);
+});
+
 app.listen(app.get("PORT"), () => {
     console.log("Listening on port %s", app.get("PORT"));
 });
+
