@@ -1,6 +1,7 @@
 const express = require("express");
 const register = express.Router();
 const crypto = require("crypto");
+const gridFs = require("../lib/");
 
 register.get("/", (req,res) => {
     res.status(200).render("register");
@@ -16,8 +17,12 @@ register.post("/", (req,res) => {
     }
 
     const users = req.db.collection("users");
+    let gridMeth = gridFs(req);
 
     delete req.body.confirm_password;
+
+    req.body.picture = req.files.picture.name;
+    req.__private_PICTURE_DATA = req.files.picture.data;
 
     users.findOne({ "$or": [ { username: username }, { bvn : bvn }]}, ( err, result ) => {
 
@@ -29,17 +34,36 @@ register.post("/", (req,res) => {
         if ( ! result ) {
 
             req.body.password = crypto.createHash("sha256").update(req.body.password).digest("hex");
-            
+
             users.insert(req.body, ( err, result ) => {
+
                 if ( err ) {
                     res.status(200).render("register", { regerr: "Unexpected Error, Cannot register you at this time" });
                     return ;
                 }
-                req.session.logedIn = true;
-                delete result.password;
-                req.session.userCred = result;
-                res.status(200).redirect("/");
+
+                gridMeth.writeFile( (err,data) => {
+
+                    if ( err ) {
+                        res.status(200).render("register", { regerr: "Cannot save image , check the image and try again" });
+                        return ;
+                    }
+
+                    const users = req.db.collection("users");
+
+                    users.updateOne( { username: req.body.username } , { $set: { file_id: data._id } }, ( err , result ) => {
+                        if ( err ) {
+                            res.status(200).render("register", { regerr: "Cannot Connect to database" });
+                        }
+                        req.session.logedIn = true;
+                        delete req.body.password;
+                        req.session.userCred = req.body;
+                        res.status(200).redirect("/");
+                    });
+                });
+
             });
+
             return ;
         }
 
