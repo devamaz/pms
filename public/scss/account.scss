@@ -4,7 +4,7 @@
 #asides {
     .user-nav-aside {
         display: inline-flex;
-        width: 200px;
+        max-width: 200px;
         background: black;
         height: 1000px;
         .user-nav-item {
@@ -36,9 +36,10 @@
 #second_aside {
     float: right;
     width: 1000px;
-    margin-right: 200px;
+    //margin-right: 200px;
     margin-top: 25px;
     overflow-y: auto;
+    height: 600px;
 }
 
 .report_crime,
@@ -93,14 +94,12 @@
 
 
 .previous_crime {
-    > p {
-        margin-left: 85px;
-    }
+    /* > p { */
+    /*     margin-left: 85px; */
+    /* } */
 }
 
 .crimelist {
-    display: flex;
-    justify-content: center;
     .crime_list_item {
         display: inline-block;
         width: 250px;
@@ -117,12 +116,53 @@
         &:first-of-type {
             margin-left: 100px;
         }
-    }
-    
+    }   
 }
 
 .showMore {
     @extend %buttons;
     margin-left: 520px;
     margin-top: 25px;
+}
+
+.update_profile {
+    span.required:after {
+        content: "  *";
+        color: red;
+    }
+    @extend %reg-update-form;
+}
+
+.picture {
+    @extend %preview-picture;
+}
+
+.last-name {
+    margin-left: 25px;
+    @extend %last-name;
+}
+
+.address {
+    @extend %address;
+}
+
+.btn-handler {
+    button {
+        @extend %buttons;
+    }
+    button:last-of-type {
+        margin-left: 15px;
+    }
+}
+
+.noCrime {
+    //margin-top: 150px;
+}
+
+[name="content"] {
+    display: block;
+    resize: none;
+    width: 700px;
+    height: 200px;
+    margin-top: 20px;
 }
