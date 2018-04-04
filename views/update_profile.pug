@@ -3,55 +3,60 @@ extends account.pug
 
 append asides
   aside#second_aside.update_profile
-    form(method="POST" action="/register")
+    form(method="POST" class="update_profile" enctype="multipart/form-data")
       p.err= regerr
       div.picture
         label.upload-picture
           p Upload Photo
-          div.preview-picture
-          input(type="file" name="picture" required)
+          div(class="preview-picture" style=result.data_uri)
+          input(type="file" name="picture")
 
       div.name-fields
 
         label.first-name
-          span.required First Name
-          input(type="text" name="firstName" placeholder="input first name" required)
+          span First Name
+          input(type="text" name="firstName" placeholder="input first name" value=result.firstName )
 
         label.last-name
-          span.required Last Name
-          input(type="text" name="lsatName" placeholder="input last name" required)
+          span Last Name
+          input(type="text" name="lastName" placeholder="input last name" value=result.lastName )
 
       div.address
         label.address-one
-          span.required Address One
-          input(type="text" name="addresOne" placeholder="Add Address" required)
+          span Address One
+          input(type="text" name="addresOne" placeholder="Add Address" value=result.addresOne )
 
       div.address
         label.address-two
-          span.required Address Two
-          input(type="text" name="addressTwo" placeholder="Add Second Address" required)
+          span Address Two
+          input(type="text" name="addressTwo" placeholder="Add Second Address" value=result.addressTwo )
 
       div.number
         label.phone-number
-          span.required Phone Number
-          input(type="telephone" name="phoneNumber" required)
+          span Phone Number
+          input(type="telephone" name="phoneNumber" value=result.phoneNumber )
 
       div.date-of-birth
         label.dob
-          span.required Date Of Birth
-          input(type="date" name="dob" required)
-
+          span Date Of Birth
+          input(type="date" name="dob" value=result.dob )
+          
+      div.bvn-number
+        label.bvn
+          span Bank Verification Number
+          input(type="number" name="bvn" placeholder="input bvn number here" value=result.bvn )
 
       div.login-pwd
         label.user-new_password
-          span.required New Password
-          input(type="password" name="new_password" class="new_password" required)
+          span New Password
+          input(type="password" name="new_password" class="new_password" )
 
       div.confirm-pwd
         label.user-old_password
-          span.required Old Password
-          input(type="password" name="old_password" class="old_password" required)
+          span Old Password
+          input(type="password" name="old_password" class="old_password" )
 
       div.btn-handler
         button.submit Update Profile
-        button(type="reset" class="reset")  Reset
+        button(type="reset" class="reset") Reset
+  script(src="/js/register.js")
