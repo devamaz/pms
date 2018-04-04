@@ -9,47 +9,23 @@ body {
     padding: 30px;
     font-size: 20px;
     font-family: sans-serif;
-    @at-root {
-        form {
-            margin-left: 50px;
-            > div {
-                padding: 20px;
-                label {
-                    input {
-                        @extend %input;
-                    }
-                    input[type="file"] {
-                        margin-left: 0;
-                    }
-                }
-            }
-        }
-    }
+    @extend %reg-update-form;
 }
 
 .picture {
-    .preview-picture {
-        height: 150px;
-        width: 15%;
-        border: 2px solid black;
-    }
-    input {
-        margin-top: 12px;
-    }
+    @extend %preview-picture;
 }
 
 .last-name {
-    span {
-        margin-left: 20px;
-    }
+    margin-left: 25px;
+    @extend %last-name;
 }
 
 
 .address {
-    input {
-        width: 50%;
-    }
+    @extend %address;
 }
+
 
 span.required:after {
     content: "  *";
