@@ -1,0 +1,27 @@
+doctype html
+
+html
+  head
+    title Admin Login
+    link(rel="stylesheet" href="/scss/adminlogin.scss")
+  body
+    p.err= err
+    div.admin-login
+      div.police-admin-img
+        img(src="/assets/police_logo.jpeg")
+      
+      form(method="POST")
+        
+        label
+          p.adm-label Admin Username
+          input(type="text" placeholder="admin username" name="adm_username")
+        
+        label
+          p.adm-label Admin Password
+          input(type="password" name="adm_password")
+        
+        div.adm-login
+          button(type="reset") Reset
+          button(type="submit") Submit
+        
+    p.adm-static Admin Login
