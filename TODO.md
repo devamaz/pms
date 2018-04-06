@@ -6,28 +6,28 @@
 
 #### USERS MODULE
 
-    [] User Login / Register
-    [] Dashboard
-        [] report crime
-        [] update profile
-        [] previous crime report
+    [x] User Login / Register
+    [x] Dashboard
+        [x] report crime
+        [x] update profile
+        [x] previous crime report
 
 #### ADMINISTRATOR MODULE
+    
+    [] Criminal
+        [] Register a criminal
+            [] Webcam ( to capture criminal photos )
+            [] Finger Printing ( to capture the criminal finger print)
+        [] retrieve criminal records
+        [] update criminal records
 
-     [] Register a criminal
-        [] Webcam ( to capture criminal photos )
-        [] Finger Printing ( to capture the criminal finger print)
+    [] News
+        [] Post news
+        [] Delete news
 
-    [] Post news
-    [] Delete news
-
-    [] SUPER USER
+    [] Police
         [] create police
         [] delete police
         [] update police
-        [] register police staff
+        [] transfer police officer
         [] assign police officers to a case
-
-    [] CRIME RECORD
-        [] retrieve criminal records
-        [] update criminal records
