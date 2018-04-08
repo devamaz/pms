@@ -32,7 +32,6 @@ account.get("/", (req,res,next) => {
 account.get("/update_profile", (req,res) => {
 
     const users = req.db.collection("users");
-
     const gridMeth = gridFs(req);
 
     gridMeth.readUserProfilePic("users", (err,result) => {
@@ -140,14 +139,20 @@ account.get("/logout", (req,res) => {
 account.get("/report_crime", (req,res,next) => {
 
     const crimelist = req.db.collection("crimelist");
-
+    const users = req.db.collection("users");
+    
     crimelist.find({}, { _id: 0 , commited: 0, type: 1 }, async (err,result) => {
         if ( err ) {
             res.status(400).render("report_crime", { err: "Unexpected Error while communicating with the database" });
             return ;
         }
         result = await result.toArray();
-        req.session.crimeType = res.locals.crimeType = result;
+        
+        res.locals.crimeType = result;
+        res.locals.userCred = await users.findOne( { username: req.session.userCred.username } );
+        
+        req.session.crimeType = res.locals.crimeType;
+        
         res.status(200).render("report_crime");
     });
 
@@ -213,8 +218,6 @@ account.get("/crime_reported", (req,res) => {
         ;
         json = true;
     }
-
-
 
     req.session._private_mongo_SKIPAMOUNT += req.session._private_mongo_LIMITAMOUNT + req.session._private_mongo_SKIPAMOUNT;
 
