@@ -11,7 +11,7 @@ db.auth(user,pwd);
 db.createCollection("users");
 db.createCollection("crimelist");
 db.createCollection("admin");
-db.createCollection("police.officer");
+db.createCollection("police");
 db.createCollection("reportedcrimes");
 
 db.crimelist.insertMany([
@@ -68,25 +68,26 @@ db.reortedCrimes.insert( {
     }
 });
 
-// db.crimemedia.insert({
-//     _crime_id: "id of commited crime that this media document is related to",
-//     media: {
-//         image: [
-//             { name: "", file_id: "" }
-//         ],
-//         videos: [
-//             { name: "", file_id: "" }
-//         ]
-//     }
-// });
 
+db.police.insert( {
+    firstName: "",
+    lastName: "",
+    servicesNo: "",
+    dateOfBirth: "",
+    commencementDate: "",
+    picture: "",
+    file_id: "",
+    station: "",
+    assignedTo: []
+});
 
 // create index
 
 db.fs.files.ensureIndex( { useruploaded: 1 }, { unique: true });
 db.users.createIndex({ username: 1, bvn: 1 }, { unique: true });
 db.crimemedia.createIndex( { _crime_id: 1 } , { unique: true });
-db.police.officers.createIndex( { serviceNumber: 1 } , { unique: true } );
+db.police.createIndex( { serviceNo: 1 }, { unique: true } );
+//db.police.createIndex( { firstName: 1, lastName: 1 } );
 
 db.users.remove({ picture: ""});
 db.crimemedia.remove({ _crime_id: { $exists: true }});
