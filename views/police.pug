@@ -1,0 +1,79 @@
+extends ./admin.pug
+
+block admin-aside2-content
+
+  button(class="add_police") Add Police
+
+  div(class="add_police_modal" hidden)
+
+    form(method="POST" enctype="multipart/form-data" class="add_police_form")
+
+      div(class="police_image")
+        div(class="preview-picture")
+        label.required.web_cam
+          input(type="radio" name="upload_media" value="webcam" required)
+          span Web Cam
+
+        label.required.file
+          input(type="radio" name="upload_media" value="file" required)
+          span File
+
+      div(class="police_cred")
+
+        div(class="name")
+          label.required.firstname
+            span Firstname:
+            input(type="text" name="police_firstname" required)
+          label.required.lastname
+            span Lastname:
+            input(type="text" name="police_lastname" requried)
+
+        div(class="info")
+
+          label.required.serviceNo
+            span Service Number:
+            input(type="number" name="police_servicenumber" required)
+
+          label.required.dob
+            span Date Of Birth:
+            input(type="date" name="police_dateofbirth" required)
+
+          label.required.commencementdate
+            span Start Date:
+            input(type="date" name="police_commencementdate" required)
+            
+          label.required.stations
+            span Stations:
+            select(class="station" name="station" required)
+              option Kwewe
+              option Kaka
+              option Tiki
+              option Ynawa
+
+      div(class="btn_handler")
+        button(class="submit" type="submit") Submit
+        button(class="reset" type="reset") Reset
+        button(class="cancel") Cancel
+  div.police-officer
+    - const badResult = noresult || err;
+    - if ( badResult ) {
+      p.badResult= badResult
+    - }
+    if ( policeinfo )
+      ul.police_info
+        each police in policeinfo
+          li.police_info_list
+            div(style="background: " + "url(data:image/jpeg;base64," + police.picture_data + ") center no-repeat; " + "background-size: cover;" class="image-preview")
+            p.name #{police.firstName} #{police.lastName}
+            p(class="service_no" __value-data=police.serviceNo) Service Number #{police.serviceNo}
+            p.dob= police.dateOfbirth
+            p.station= police.station + " police station"
+            - const caseLength = police.assignedTo.length;
+            p.numberOfCases= "Handled " + (caseLength > 0 ? caseLength : 0 ) + " criminal case"
+            div.ctrlbtn
+              button.transfer Transfer
+              button.assignto Assign
+              button.delete Delete
+              button.viewcase View Cases
+        
+  script(src="/js/police.js")
