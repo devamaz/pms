@@ -1,0 +1,28 @@
+doctype html
+
+html
+  head
+    title Admin Area
+    link(rel="stylesheet" href="/scss/_reset.scss")
+    link(rel="stylesheet" href="/scss/admin.scss")
+  body
+    header.admin-header
+      p.admin-descr Admin Portal
+      p.admin-logout
+        a(href="/admin/logout") Logout
+    
+    aside.admin-aside1
+      nav.admin-nav
+        ul.admin-nav-parent
+          li.admin-nav-list.active
+            a(href="/admin/police") Police
+          li.admin-nav-list
+            a(href="/admin/criminal") Criminal
+          li.admin-nav-list
+            a(href="/admin/news") News
+          
+          li.admin-nav-list
+            a(href="/admin/station") Stations
+            
+    aside.admin-aside2
+      block admin-aside2-content
