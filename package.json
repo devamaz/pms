@@ -21,6 +21,7 @@
         "magic-number": "^0.1.6",
         "mongodb": "^3.0.4",
         "node-sass": "^4.7.2",
+        "nodemon": "^1.17.3",
         "pug": "^2.0.0",
         "serve-favicon": "^2.4.5"
     }
