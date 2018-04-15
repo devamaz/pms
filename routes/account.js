@@ -176,7 +176,7 @@ account.post("/report_crime", async (req,res) => {
     
     await reportedCrimes.insert( { _id , crimes: req.body , reportedBy: req.session.userCred.username } )
         .catch(cannotConnectDb);
-    
+
     for ( let imageFile of req.files.crime_scene_image ) {
         try {
             await gridMeth.writeMediaFile({ type: "image", media: imageFile, _id });
@@ -198,7 +198,7 @@ account.post("/report_crime", async (req,res) => {
     await crimelist.updateOne( { type: req.body.crime_type }, { $inc: { commite: 1 } } )
         .catch(cannotConnectDb);
     
-    return res.status(200).render("report_crime");
+    return res.status(200).redirect("/account/report_crime");
 });
 
 account.get("/crime_reported", (req,res) => {
