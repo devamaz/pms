@@ -6,6 +6,7 @@
     const closeModal = document.querySelector(".cancel");
     const policeImage = document.querySelector(".police_image");
     const btnPolice = document.querySelector(".police_info");
+    const stationList = document.querySelector(".station_list");
 
     const buildScript = () => {
         let checkScriptStatus = document.querySelector("[__added__script=true]");
@@ -74,6 +75,119 @@
     };
 
 
+    const handlePoliceBtn = Object.defineProperties( {}, {
+        __serviceNumber: {
+            value(parentNode) {
+                return parentNode.querySelector(".service_no");
+            },
+            enumerable: false,
+            writeable: false,
+            configurable: false
+        },
+        __cover: {
+            *value(parentNode, remove) {
+                /*** generator ***/
+                const cover = document.createElement("div");
+                cover.classList.add("cover");
+
+                parentNode.appendChild(cover);
+
+                if ( remove )
+                    return (yield cover.remove());
+
+                if ( ! (yield) ) {
+                    const err = document.querySelector(".err");
+                    err.textContent = "Cannot Delete Data";
+                    yield false;
+                }
+            }
+        },
+        delete: {
+            value(parentNode) {
+
+                const gen = this.__cover(parentNode, true); /****** starting generator ******/
+
+
+                makeRequest({ method: "DELETE" , serviceNumber: this.__serviceNumber(parentNode), pnode: parentNode }, xhr => {
+
+                    const { done } = JSON.parse(xhr.responseText);
+
+                    gen.next(); /**** calling next ***/
+
+                    if ( ! gen.next(done).value ) return ;
+
+                    parentNode.remove();
+
+                    const allPolice = document.querySelectorAll(".police_info_list");
+
+                    if ( allPolice.length === 0 )  {
+                        location.assign("/admin/police");
+                    }
+                });
+
+            }
+        },
+        transfer: {
+            value(parentNode,data,cb) {
+
+                const gen = this.__cover(parentNode, true);
+
+                makeRequest({
+                    method: cb ? "POST" : "GET",
+                    serviceNumber: this.__serviceNumber(parentNode),
+                    pnode: parentNode,
+                    data: data ? data : null }, cb ||
+
+                            function (xhr) {
+
+                                const { done } = JSON.parse(xhr.responseText);
+
+                                gen.next();
+
+                                if ( ! gen.next(done).value ) return ;
+
+                                const { stations: [ { station: stations } ] } = JSON.parse(xhr.responseText);
+                                const stationList = document.querySelector(".station_list");
+
+                                if ( stationList.childElementCount !== 0 ) {
+                                    stationList.hidden = false;
+                                    return ;
+                                }
+
+                                stations.forEach( station => {
+                                    const li = document.createElement("li");
+                                    li.setAttribute("class", "station_item");
+                                    li.setAttribute("__station", station);
+                                    li.textContent = station;
+                                    stationList.appendChild(li);
+                                });
+
+                                stationList.hidden = false;
+
+                            });
+
+            }
+        }
+    });
+
+
+    const makeRequest = ({ method, serviceNumber, pnode, data },cb) => {
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open(method, "/admin/police?serviceNo=" + serviceNumber.getAttribute("__value-data"), true);
+
+        xhr.addEventListener("readystatechange", evt => {
+
+            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+                cb(xhr);
+            }
+        });
+
+        xhr.setRequestHeader("X-Requested-With", "XMLHttprequest");
+        xhr.send(data);
+    };
+
     Array.prototype.slice.call(policeImage_capture)
         .forEach ( x => {
             x.addEventListener("click", evt => {
@@ -108,45 +222,42 @@
             return ;
 
 
-        const xhr = new XMLHttpRequest();
-        const parentNode = target.parentNode.parentNode;
-        const serviceNumberEl = parentNode.querySelector(".service_no");
+        try {
+            handlePoliceBtn[target.getAttribute("class")](target.parentNode.parentNode);
+        } catch(ex) {
+            console.log(ex);
+        }
 
-        const cover = document.createElement("div");
-        cover.classList.add("cover");
-        parentNode.appendChild(cover);
+    });
 
-        xhr.open("DELETE", "/admin/police?serviceNo=" + serviceNumberEl.getAttribute("__value-data"), true);
+    stationList.addEventListener("click", evt => {
 
-        xhr.addEventListener("readystatechange", evt => {
+        const { target } = evt;
 
-            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+        if ( ! HTMLLIElement[Symbol.hasInstance](target) )
+            return ;
 
-                const { done } = JSON.parse(xhr.responseText);
-                
-                cover.remove();
+        //li
+        const parentNode = target.parentNode.parentNode.parentNode.parentNode;
+        const gen = handlePoliceBtn.__cover(parentNode, true);
+        const fData = new FormData();
 
-                if ( ! done ) {
-                    const err = document.querySelector(".err");
-                    err.textContent = "Cannot Delete Data";
-                    return ;
-                }
+        fData.append("station", target.getAttribute("__station"));
 
-                const allPolice = document.querySelectorAll(".police_info_list");
-                
-                parentNode.remove();
-                
-                if ( (allPolice.length - 1 ) === 0 )  {
-                    location.assign("/admin/police");
-                }
-                
-                
-            }
+        handlePoliceBtn.transfer( parentNode , fData , xhr => {
+
+            const { done } = JSON.parse(xhr.responseText);
+
+            gen.next();
+
+            if ( ! gen.next(done).value ) return ;
+
+            location.assign("/admin/police");
+
+
         });
 
-        xhr.setRequestHeader("X-Requested-With", "XMLHttprequest");
 
-        xhr.send(null);
     });
 
 })();
