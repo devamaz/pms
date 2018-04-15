@@ -69,7 +69,7 @@ db.reortedCrimes.insert( {
 });
 
 
-db.police.insert( {
+db.police.officers.insert( {
     firstName: "",
     lastName: "",
     servicesNo: "",
@@ -81,12 +81,16 @@ db.police.insert( {
     assignedTo: []
 });
 
+db.police.stations.insert({
+    station: [ "kiwi", "kaka", "titi", "pipon" ]
+});
+
 // create index
 
 db.fs.files.ensureIndex( { useruploaded: 1 }, { unique: true });
 db.users.createIndex({ username: 1, bvn: 1 }, { unique: true });
 db.crimemedia.createIndex( { _crime_id: 1 } , { unique: true });
-db.police.createIndex( { serviceNo: 1 }, { unique: true } );
+db.police.officers.createIndex( { serviceNo: 1 }, { unique: true } );
 //db.police.createIndex( { firstName: 1, lastName: 1 } );
 
 db.users.remove({ picture: ""});
