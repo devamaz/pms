@@ -72,6 +72,7 @@ block admin-aside2-content
             p.numberOfCases= "Handled " + (caseLength > 0 ? caseLength : 0 ) + " criminal case"
             div.ctrlbtn
               button.transfer Transfer
+                ul(class="station_list" hidden)
               button.assignto Assign
               button.delete Delete
               button.viewcase View Cases
