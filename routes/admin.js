@@ -1,6 +1,8 @@
 const express = require("express");
 const crypto = require("crypto");
 const gridFs = require("../lib/");
+const policeHandlers = require("../lib/police_actions.js");
+
 const admin = express.Router();
 
 
@@ -55,7 +57,12 @@ admin.use((req,res,next) => {
 });
 
 admin.get("/police", async (req,res) => {
-    const police = req.db.collection("police");
+
+
+    if ( req.xhr )
+        return policeHandlers.transferGetHandler(req,res);
+
+    const police = req.db.collection("police.officers");
     let result;
     try {
         result = (await police.find({ }, { _id: 0 })).toArray();
@@ -88,7 +95,10 @@ admin.get("/police", async (req,res) => {
 
 admin.post("/police", async (req,res) => {
 
-    const police = req.db.collection("police");
+    if ( req.xhr )
+        return policeHandlers.transferPostHandler(req,res);
+
+    const police = req.db.collection("police.officers");
 
     const {
         police_firstname: firstName,
@@ -129,27 +139,63 @@ admin.post("/police", async (req,res) => {
 });
 
 admin.delete("/police", async (req,res) => {
+
     if ( ! req.xhr )
         return res.status(200).json( { done: false } );
 
-    const { serviceNo } = req.query;
-    const police = req.db.collection("police");
+    return policeHandlers.deleteHandler(req,res);
+});
+
+
+admin.get("/cases", async ( req, res) => {
+
+    const reportedCrimes = req.db.collection("reportedcrimes");
 
     let result;
 
     try {
-        result = await police.removeOne( { serviceNo } );
-        console.log(result);
-    } catch(ex) {
-        result = ex;
-    } finally {
-        
-        if ( Error[Symbol.hasInstance](result) )
-            return res.status(200).json( { done: false } );
 
-        if ( result.deletedCount === 1 )
-            return res.status(200).json( { done: true } );
-        
+        result = await reportedCrimes.find({}).toArray();
+
+    } catch(ex) {
+
+        result = ex;
+
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render("cases", { err: "cannot connect to db to retrieve reported crime" });
+
+        if ( result.length === 0 )
+            return res.status(200).render("cases", { err: "no crime have been reported yet" });
+
+        return res.status(200).render("cases", { cases: result } );
+    }
+});
+
+admin.post("/cases", async (req,res) => {
+
+    const { state, _id } = req.body;
+    const reportedCrimes = req.db.collection("reportedcrimes");
+
+
+    let result ;
+
+    try {
+
+        result = await reportedCrimes.update({ _id }, { $set: { state } } ) ;
+
+    } catch(ex) {
+
+        result = ex;
+
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).json({ done: false });
+
+        return res.status(200).json({ done: true } );
+
     }
 });
 
