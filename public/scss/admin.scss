@@ -133,15 +133,16 @@ form.add_police_form {
             span {
                 vertical-align: top;
                 font-size: 1.3em;
+                margin-left: -130px;
             }
         }
 
         label.web_cam {
-            margin-left: 80px;
+            margin-left: 10px;
         }
 
         label.file {
-            margin-left: 30px;
+            margin-left: 10px;
         }
     }
 
@@ -275,6 +276,28 @@ label.required {
     animation-timing-function: ease-in-out;
     animation-duration: 4s;
     animation-iteration-count: infinite;
+}
+
+.station_list {
+    position: absolute;
+    background: darken(white,2%);
+    width:100px;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    color: black;
+    font-size: 1.3em;
+
+    .station_item:not(:first-of-type) {
+        margin-top: 5px;
+    }
+
+    .station_item {
+        &:hover {
+            background-color: lighten(red,20%);
+        }
+    }
 }
 
 
