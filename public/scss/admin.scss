@@ -301,6 +301,72 @@ label.required {
 }
 
 
+.crime_cases {
+    .crime_case_item {
+        height: inherit;
+        width: 100%;
+        .crime_case_list {
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            margin-left: -20px;
+            line-height: 1.5;
+            border: 3px solid darken(white, 12%);
+            margin-top: 20px;
+            &:not(:first-of-type) {
+                margin-top: 30px;
+            }
+
+            .state {
+                margin-top: 4px;
+                select {
+                    width: 20%;
+                }
+            }
+        }
+    }
+}
+
+
+.reportedBy {
+    font-style: italic;
+    color: darken(lightblue,40%);
+}
+
+.crime_state {
+    float: right;
+    margin-right: 12px;
+    padding: 3px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bolder;
+    width: 70px;
+    text-align: center;
+}
+
+.crime_pending {
+    border: 2px solid red;
+    background: lighten(red,20%);
+}
+
+.crime_approved {
+    border: 2px solid darken(yellow,5%);
+    background: darken(yellow, 5%);
+}
+
+.crime_active {
+    border: 2px solid green;
+    background: darken(green, 5%);
+}
+
+.crime_show_media {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 @keyframes animateCover {
     @for $i from 1 through 40 {
         #{$i}% {

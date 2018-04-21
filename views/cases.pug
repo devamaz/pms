@@ -1,0 +1,26 @@
+extends ./admin.pug
+
+block admin-aside2-content
+
+  div(class="crime_cases")
+    
+    ul.crime_case_item
+      each _case in cases
+        li(class="crime_case_list" _data_req=_case._id)
+          span(class=[ "crime_state", `crime_${_case.state}` ]) #{_case.state}
+          p.crime_type Crime Category: #{_case.crimes.crime_type}
+          p.crime_location Crime Location: #{ _case.crimes.crime_location}
+          p.content Details: #{ _case.crimes.content}
+          a(href=`/users/${_case.reportedBy}` class="reportedBy") Reported By: #{_case.reportedBy}
+          label.state
+            span Change State
+            select(name="change_state")
+              option Pending
+              option Approved
+              option Active
+          
+          
+          p.crime_show_media Show Media
+                
+                
+  script(src="/js/cases.js")

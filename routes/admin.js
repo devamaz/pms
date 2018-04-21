@@ -2,7 +2,9 @@ const express = require("express");
 const crypto = require("crypto");
 const gridFs = require("../lib/");
 const policeHandlers = require("../lib/police_actions.js");
-
+const cluster = require("cluster");
+const os = require("os");
+const { ObjectId } = require("mongodb");
 const admin = express.Router();
 
 
@@ -197,6 +199,68 @@ admin.post("/cases", async (req,res) => {
         return res.status(200).json({ done: true } );
 
     }
+});
+
+admin.post("/cases/setstate", async ( req, res) => {
+
+    if ( ! req.xhr )
+        return res.status(200).render("error", { err: "You can only access this section with an xhr request"} );
+
+    const { _id } = req.query;
+    const { state } = req.body;
+
+    const reportedCrimes = req.db.collection("reportedcrimes");
+
+    let result ;
+
+    try {
+        result = await reportedCrimes.update({ _id: ObjectId(_id) }, { $set: { state: state.toLowerCase() } });
+    } catch(ex) {
+        result = ex;
+    } finally {
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).json({ err: "Cannot service request" });
+
+        const state = (await reportedCrimes.findOne({ _id: ObjectId(_id) })).state;
+
+        return res.status(200).json({
+            state,
+            class: `crime_${state}`
+        });
+    }
+
+});
+
+admin.get("/cases/getmedia", async ( req, res ) => {
+
+    if ( ! req.xhr )
+        return res.status(200).render("error", { err: "You can only access this section with an xhr request"} );
+
+    const { _id } = req.query;
+    const reportedCrimes = req.db.collection("reportedcrimes");
+
+    let result;
+
+    try {
+        result = await reportedCrimes.findOne( { _id: ObjectId(_id) } );
+    } catch(ex) {
+        result = ex;
+    } finally {
+    }
+
+    if ( Error[Symbol.hasInstance](result) ) {
+        return res.status(200).json({ err: "cannot retrieve information" });
+    }
+
+    //const gridMeth = gridFs(req);
+    try {
+        for ( let medias of gridFs.readCasesMedia(result) ) {
+            console.log(medias.name);
+        }
+        
+        return res.status(200).json({});
+    } catch(ex) { console.log(ex) };
+
 });
 
 admin.get("/logout", ( req, res ) => {
