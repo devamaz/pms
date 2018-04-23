@@ -6,7 +6,6 @@
     const closeModal = document.querySelector(".cancel");
     const policeImage = document.querySelector(".police_image");
     const btnPolice = document.querySelector(".police_info");
-    const stationList = document.querySelector(".station_list");
 
     const buildScript = () => {
         let checkScriptStatus = document.querySelector("[__added__script=true]");
@@ -74,6 +73,79 @@
         return true;
     };
 
+    const transferToStation = (evt,parentNode) => {
+
+        const { target } = evt;
+        const gen = handlePoliceBtn.__cover(parentNode, true);
+        const fData = new FormData();
+
+        fData.append("station", target.getAttribute("__station"));
+
+        handlePoliceBtn.transfer( parentNode , fData , xhr => {
+            const { done } = JSON.parse(xhr.responseText);
+            gen.next();
+            if ( ! gen.next(done).value ) return ;
+            location.assign("/admin/police");
+        });
+    };
+
+    const assignNumberHandler = evt => {
+
+        const xhr = new XMLHttpRequest();
+        const inputEl = evt.target;
+        const caseListNumber = inputEl.parentNode.querySelector(".case_list_n");
+
+        caseListNumber.setAttribute("style", "display: block");
+
+        xhr.open("GET", `/admin/cases/case_number?casen=${inputEl.value}`, true);
+
+        xhr.addEventListener("readystatechange", evt => {
+
+            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+
+                const { result } = JSON.parse(xhr.responseText);
+                const lis = document.querySelectorAll(".case_item_n");
+
+                if ( result.length === 0 ) {
+                    if ( lis.length !== 0 ) {
+                        Array.from(lis, el => el.remove());
+                    }
+                    caseListNumber.removeAttribute("style");
+                    return ;
+                }
+
+                result.forEach( res => {
+                    Array.from(lis, _list => {
+                        if ( res.case_number === _list.textContent ) {
+                            _list.remove();
+                        }
+                    });
+                });
+
+                result.forEach( res => {
+
+                    const li = document.createElement("li");
+
+                    li.setAttribute("class", "case_item_n");
+
+                    li.addEventListener("click", evt => {
+                        inputEl.value = evt.target.textContent;
+                        caseListNumber.removeAttribute("style");
+                    });
+
+                    li.textContent = res.case_number;
+
+                    caseListNumber.appendChild(li);
+
+                });
+            }
+
+        });
+
+
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.send(null);
+    };
 
     const handlePoliceBtn = Object.defineProperties( {}, {
         __serviceNumber: {
@@ -113,13 +185,13 @@
                     const { done } = JSON.parse(xhr.responseText);
 
                     gen.next(); /**** calling next ***/
-
+                    console.log(done);
                     if ( ! gen.next(done).value ) return ;
 
                     parentNode.remove();
 
                     const allPolice = document.querySelectorAll(".police_info_list");
-
+                    
                     if ( allPolice.length === 0 )  {
                         location.assign("/admin/police");
                     }
@@ -131,7 +203,7 @@
             value(parentNode,data,cb) {
 
                 const gen = this.__cover(parentNode, true);
-
+                console.log(parentNode);
                 makeRequest({
                     method: cb ? "POST" : "GET",
                     serviceNumber: this.__serviceNumber(parentNode),
@@ -147,7 +219,7 @@
                                 if ( ! gen.next(done).value ) return ;
 
                                 const { stations: [ { station: stations } ] } = JSON.parse(xhr.responseText);
-                                const stationList = document.querySelector(".station_list");
+                                const stationList = parentNode.querySelector(".station_list");
 
                                 if ( stationList.childElementCount !== 0 ) {
                                     stationList.hidden = false;
@@ -158,6 +230,7 @@
                                     const li = document.createElement("li");
                                     li.setAttribute("class", "station_item");
                                     li.setAttribute("__station", station);
+                                    li.addEventListener("click", evt => transferToStation(evt,parentNode));
                                     li.textContent = station;
                                     stationList.appendChild(li);
                                 });
@@ -165,6 +238,52 @@
                                 stationList.hidden = false;
 
                             });
+
+            }
+        },
+        assignto: {
+            value(parentNode) {
+
+                const target = parentNode.querySelector(".assignto");
+                const assignModal = target.querySelector(".assign");
+                const assignNumber = target.querySelector(".assign_number");
+                const assignSubmit = target.querySelector(".assign_submit");
+                const closeModal = target.querySelector(".close_assign");
+
+                assignModal.setAttribute("style", "display: block;");
+                assignNumber.addEventListener("keyup", assignNumberHandler);
+
+                assignSubmit.addEventListener("click", () => {
+
+                    const gen = this.__cover(parentNode, true);
+                    const data = new FormData();
+
+                    data.append("casen", assignNumber.value);
+
+                    makeRequest({
+                        method: "POST" ,
+                        serviceNumber: this.__serviceNumber(parentNode),
+                        data,
+                        pnode: parentNode
+                    }, xhr => {
+
+                        const { done } = JSON.parse(xhr.responseText);
+
+                        if ( ! done ) {
+                            const err = document.querySelector(".err");
+                            err.textContent = "Cannot assign police officer to case";
+                            return ;
+                        }
+
+                        location.assign("/admin/police");
+
+                    });
+
+                });
+
+                closeModal.addEventListener("click", () => {
+                    assignModal.removeAttribute("style");
+                });
 
             }
         }
@@ -230,34 +349,5 @@
 
     });
 
-    stationList.addEventListener("click", evt => {
-
-        const { target } = evt;
-
-        if ( ! HTMLLIElement[Symbol.hasInstance](target) )
-            return ;
-
-        //li
-        const parentNode = target.parentNode.parentNode.parentNode.parentNode;
-        const gen = handlePoliceBtn.__cover(parentNode, true);
-        const fData = new FormData();
-
-        fData.append("station", target.getAttribute("__station"));
-
-        handlePoliceBtn.transfer( parentNode , fData , xhr => {
-
-            const { done } = JSON.parse(xhr.responseText);
-
-            gen.next();
-
-            if ( ! gen.next(done).value ) return ;
-
-            location.assign("/admin/police");
-
-
-        });
-
-
-    });
 
 })();
