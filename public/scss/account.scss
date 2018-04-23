@@ -1,5 +1,5 @@
 @import "button.scss";
-
+@import "state_of_crime.scss";
 
 #asides {
     .user-nav-aside {
@@ -35,7 +35,7 @@
 
 #second_aside {
     float: right;
-    width: 1000px;
+    width: 80%;
     //margin-right: 200px;
     margin-top: 25px;
     overflow-y: auto;
@@ -100,21 +100,28 @@
 }
 
 .crimelist {
+    
     .crime_list_item {
-        display: inline-block;
-        width: 250px;
-        border: 2px solid black;
-        padding: 25px;
-        margin: 12px;
-        box-shadow: 0px 0px 4px -1px black;
-        margin-top: 25px;
+        
+        width: 100%;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        margin-left: -20px;
+        line-height: 1.5;
+        border: 3px solid darken(white, 12%);
+        margin-top: 20px;
+        
+        &:not(:first-of-type) {
+            margin-top: 30px;
+        }
+
+        
         > p {
             font-weight: initial;
-            margin-top: 12px;
-            line-height: 1.5;
-        }
-        &:first-of-type {
-            margin-left: 100px;
+            margin-top: 2px;
+            text-align: initial;
+            font-size: 20px;
         }
     }   
 }
@@ -126,6 +133,7 @@
 }
 
 .update_profile {
+    
     span.required:after {
         content: "  *";
         color: red;
