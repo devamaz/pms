@@ -74,7 +74,13 @@ block admin-aside2-content
               button.transfer Transfer
                 ul(class="station_list" hidden)
               button.assignto Assign
+                div.assign
+                  p Input Case Number
+                  input(type="text" class="assign_number")
+                  input(type="button" class="assign_submit" value="Assign")
+                  input(type="button" class="close_assign" value="Close")
+                  ul(class="case_list_n")
               button.delete Delete
               button.viewcase View Cases
-        
+      
   script(src="/js/police.js")
