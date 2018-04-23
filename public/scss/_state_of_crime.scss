@@ -1,0 +1,33 @@
+
+.crime_state {
+    float: right;
+    margin-right: 12px;
+    padding: 3px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bolder !important;
+    width: 70px;
+    text-align: center !important;
+}
+
+.crime_pending {
+    border: 2px solid red;
+    background: lighten(red,20%);
+}
+
+.crime_approved {
+    border: 2px solid darken(yellow,5%);
+    background: darken(yellow, 5%);
+}
+
+.crime_active {
+    border: 2px solid green;
+    background: darken(green, 5%);
+}
+
+.crime_show_media {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
