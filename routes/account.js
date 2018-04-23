@@ -140,19 +140,19 @@ account.get("/report_crime", (req,res,next) => {
 
     const crimelist = req.db.collection("crimelist");
     const users = req.db.collection("users");
-    
+
     crimelist.find({}, { _id: 0 , commited: 0, type: 1 }, async (err,result) => {
         if ( err ) {
             res.status(400).render("report_crime", { err: "Unexpected Error while communicating with the database" });
             return ;
         }
         result = await result.toArray();
-        
+
         res.locals.crimeType = result;
         res.locals.userCred = await users.findOne( { username: req.session.userCred.username } );
-        
+
         req.session.crimeType = res.locals.crimeType;
-        
+
         res.status(200).render("report_crime");
     });
 
@@ -163,7 +163,6 @@ account.post("/report_crime", async (req,res) => {
     const crimelist = req.db.collection("crimelist");
     const reportedCrimes = req.db.collection("reportedcrimes");
     const users = req.db.collection("users");
-    const cannotConnectDb = () => res.status(400).render("report_crime", { err: "Error while connecting to database" });
 
     const gridMeth = gridFs(req);
 
@@ -173,32 +172,46 @@ account.post("/report_crime", async (req,res) => {
     res.locals.crimeType = req.session.crimeType;
 
     const _id = new ObjectID();
-    
-    await reportedCrimes.insert( { _id , crimes: req.body , reportedBy: req.session.userCred.username } )
-        .catch(cannotConnectDb);
+    let result ;
 
-    for ( let imageFile of req.files.crime_scene_image ) {
-        try {
+    try {
+
+        await reportedCrimes.insert( {
+            _id ,
+            crimes: req.body ,
+            state: "pending" ,
+            date: new Date(),
+            reportedBy: req.session.userCred.username,
+            case_number: _id.toString().substr(-8)
+        } );
+
+        for ( let imageFile of req.files.crime_scene_image ) {
             await gridMeth.writeMediaFile({ type: "image", media: imageFile, _id });
-        } catch(ex) {
-            console.log(ex);
-            return cannotConnectDb();
         }
-    }
 
-    for ( let videoFile of req.files.crime_scene_video ) {
-        try {
+        for ( let videoFile of req.files.crime_scene_video ) {
             await gridMeth.writeMediaFile({ type: "videos", media: videoFile, _id });
-        } catch(ex) {
-            console.log(ex);
-            return cannotConnectDb();
         }
-    }
 
-    await crimelist.updateOne( { type: req.body.crime_type }, { $inc: { commite: 1 } } )
-        .catch(cannotConnectDb);
-    
-    return res.status(200).redirect("/account/report_crime");
+        await crimelist.updateOne( { type: req.body.crime_type }, { $inc: { commite: 1 } } );
+
+        result = "done";
+
+    } catch(ex) {
+        result = ex;
+    } finally {
+        console.log(result);
+        if ( Error[Symbol.hasInstance](result) ) {
+            reportedCrimes.findOneAndDelete({ _id });
+            //shhhh
+            gridMeth.deleteFile(_id, (err) => {});
+            crimelist.updateOne( { type: req.body.crime_type } , { $inc: { commite: -1 } } );
+            return res.status(200).render("report_crime", { err: "Error while connecting to database" });
+        }
+
+        return res.status(200).redirect("/account/report_crime");
+
+    }
 });
 
 account.get("/crime_reported", (req,res) => {
@@ -238,6 +251,7 @@ account.get("/crime_reported", (req,res) => {
         }
 
         if ( ! json ) {
+            console.log(crime);
             res.status(200).render("crime_reported", { crime });
             return ;
         }
