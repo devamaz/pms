@@ -9,7 +9,11 @@ append asides
       if ( ! crerr && ! no_crime )
         each value in crime
           li.crime_list_item
+            p(class=["crime_state", "crime_" + value.state]) #{value.state}
+            p.case_number Crime Number: #{value.case_number}
             p.date Date Reported:  #{value.crimes.crime_date}
             p.location Location Of Crime: #{value.crimes.crime_location}
             p.type Crime Type:  #{value.crimes.crime_type}
+            p.content Crime Content: #{value.crimes.content}
+            
     //button.showMore More
