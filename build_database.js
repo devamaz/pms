@@ -11,8 +11,11 @@ db.auth(user,pwd);
 db.createCollection("users");
 db.createCollection("crimelist");
 db.createCollection("admin");
-db.createCollection("police");
+db.createCollection("police.officers");
+db.createCollection("police.stations");
 db.createCollection("reportedcrimes");
+
+db.admin.insert( { username: "admin", password: "5f4dcc3b5aa765d61d8327deb882cf99" } );
 
 db.crimelist.insertMany([
     {
@@ -56,8 +59,12 @@ db.users.insert({
     file_id: ""
 });
 
-db.reortedCrimes.insert( {
-    
+db.reortedcrimes.insert( {
+    crimes : {
+	crime_type : "",
+	crime_location : "",
+	content : ""
+    },
     media: {
         image: [
             { name: "", file_id: "" }
@@ -65,7 +72,12 @@ db.reortedCrimes.insert( {
         videos: [
             { name: "", file_id: "" }
         ]
-    }
+    },
+    state : "",
+    date : "",
+    reportedBy : "",
+    case_number : "",
+    officers_in_charge: []
 });
 
 
@@ -86,12 +98,13 @@ db.police.stations.insert({
 });
 
 // create index
-
-db.fs.files.ensureIndex( { useruploaded: 1 }, { unique: true });
+db.reportedcrimes.createIndex({ case_number: 1 }, { unique: true } );
 db.users.createIndex({ username: 1, bvn: 1 }, { unique: true });
 db.crimemedia.createIndex( { _crime_id: 1 } , { unique: true });
 db.police.officers.createIndex( { serviceNo: 1 }, { unique: true } );
 //db.police.createIndex( { firstName: 1, lastName: 1 } );
 
 db.users.remove({ picture: ""});
+db.police.officers.remove({firstName: ""});
+db.reportedcrimes.remove( { state: ""} );
 db.crimemedia.remove({ _crime_id: { $exists: true }});
