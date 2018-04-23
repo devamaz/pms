@@ -1,4 +1,5 @@
 @import "button.scss";
+@import "state_of_crime.scss";
 
 body {
     overflow-x: hidden;
@@ -17,9 +18,17 @@ header {
 
     .admin-descr {
         float: left;
-        width: 80%;
+        width: 30%;
         font-size: 1.5em;
         margin-left: 30px;
+    }
+
+    .err {
+        display: inline;
+        text-align: center;
+        color: red;
+        clear: left;
+        margin-left: 200px;
     }
 
     .admin-logout {
@@ -41,7 +50,7 @@ header {
     float: left;
     display: inline-flex;
     width: 200px;
-    height: 769px;
+    height: 800px;
     background: black;
     box-shadow: 0px 0px 46px -7px black;
     .admin-nav {
@@ -73,7 +82,7 @@ header {
 
 .admin-aside2 {
     float: right;
-    width: 1020px;
+    width: 80%;
     margin-right: 20px;
 }
 
@@ -233,11 +242,11 @@ label.required {
 .police_info {
     clear: both;
     width: 100%;
-    height: 700px;
+    height: 600px;
     padding-bottom: 50px;
     margin-top: 50px;
     overflow-x: auto;
-
+    
     .police_info_list {
         background: white;
         box-shadow: 0px 0px 10px 3px darken(white,25%);
@@ -300,12 +309,63 @@ label.required {
     }
 }
 
+.assign {
+
+    display: none;
+    background: white;
+    padding: 12px;
+
+    position: absolute;
+    margin-left: -30px;
+    margin-top: -350px;
+
+
+    input[type="text"] {
+        padding: 12px;
+        border-radius: 30px;
+        border: 1px solid black;
+        display: block;
+
+    }
+
+    input[type="button"] {
+        @extend %buttons;
+        margin-top: 10px;
+        &:last-of-type {
+            margin-left: 12px;
+        }
+    }
+}
+
+.case_list_n {
+    display: none;
+    position: absolute;
+    background: white;
+    color: black;
+    padding: 12px;
+    top: 90px;
+    width: 170px;
+    .case_item_n {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        &:hover {
+            background: lighten(red,20%);
+        }
+    }
+}
 
 .crime_cases {
+    
     .crime_case_item {
-        height: inherit;
+        
+        height: 650px;
         width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 300px;
+        
         .crime_case_list {
+            
             width: 100%;
             padding-top: 20px;
             padding-bottom: 20px;
@@ -314,10 +374,34 @@ label.required {
             line-height: 1.5;
             border: 3px solid darken(white, 12%);
             margin-top: 20px;
+            
             &:not(:first-of-type) {
                 margin-top: 30px;
             }
 
+            .officers_item {
+                
+                display: inline;
+                
+                &:after {
+                    content: ", ";
+                    color: darken(lightblue,40%);
+                }
+                
+                &:last-of-type:after {
+                    content: "";
+                }
+                
+                a {
+                    color: darken(lightblue,40%);
+                    &:hover {
+                        text-decoration: underline;
+                        font-style: italics;
+                    }
+                }
+
+            }
+            
             .state {
                 margin-top: 4px;
                 select {
@@ -334,38 +418,6 @@ label.required {
     color: darken(lightblue,40%);
 }
 
-.crime_state {
-    float: right;
-    margin-right: 12px;
-    padding: 3px;
-    border-radius: 20px;
-    color: white;
-    font-weight: bolder;
-    width: 70px;
-    text-align: center;
-}
-
-.crime_pending {
-    border: 2px solid red;
-    background: lighten(red,20%);
-}
-
-.crime_approved {
-    border: 2px solid darken(yellow,5%);
-    background: darken(yellow, 5%);
-}
-
-.crime_active {
-    border: 2px solid green;
-    background: darken(green, 5%);
-}
-
-.crime_show_media {
-    cursor: pointer;
-    &:hover {
-        text-decoration: underline;
-    }
-}
 
 @keyframes animateCover {
     @for $i from 1 through 40 {
