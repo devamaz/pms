@@ -5,22 +5,32 @@ block admin-aside2-content
   div(class="crime_cases")
     
     ul.crime_case_item
-      each _case in cases
-        li(class="crime_case_list" _data_req=_case._id)
-          span(class=[ "crime_state", `crime_${_case.state}` ]) #{_case.state}
-          p.crime_type Crime Category: #{_case.crimes.crime_type}
-          p.crime_location Crime Location: #{ _case.crimes.crime_location}
-          p.content Details: #{ _case.crimes.content}
-          a(href=`/users/${_case.reportedBy}` class="reportedBy") Reported By: #{_case.reportedBy}
-          label.state
-            span Change State
-            select(name="change_state")
-              option Pending
-              option Approved
-              option Active
-          
-          
-          p.crime_show_media Show Media
+      if ( ! cases )
+        p.badResult No Crime Reported Yet
+      else
+        each _case in cases
+          li(class="crime_case_list" _data_req=_case._id)
+            span(class=[ "crime_state", `crime_${_case.state}` ]) #{_case.state}
+            p.case_number Crime Number: #{_case.case_number}
+            p.crime_date Report Date: #{_case.date}
+            p.crime_type Crime Category: #{_case.crimes.crime_type}
+            p.crime_location Crime Location: #{ _case.crimes.crime_location}
+            p.content Details: #{ _case.crimes.content}
+            a(href=`/users/${_case.reportedBy}` class="reportedBy") Reported By: #{_case.reportedBy}
+            p.assigned Officers assigned to case #{_case.case_number}
+            ul.officers_list
+              each officer in (_case.officers_in_charge ? _case.officers_in_charge :  [ ])
+                li.officers_item
+                  a(href=`/admin/police/${officer}`) #{officer}
+            label.state
+              span Change State
+              select(name="change_state")
+                option Pending
+                option Approved
+                option Active
+
+
+            p.crime_show_media Show Media
                 
                 
   script(src="/js/cases.js")
