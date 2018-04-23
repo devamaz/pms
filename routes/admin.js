@@ -12,11 +12,15 @@ admin.get("/", ( req, res, next ) => {
     if ( req.session.____AdminLogedIn____ ) {
         res.status(200).render("admin");
     } else {
-        res.status(200).render("adminlogin");
+        res.status(200).redirect("/admin/adminlogin");
     }
 });
 
-admin.post("/", async (req,res,next) => {
+admin.get("/adminlogin", (req,res) => {
+    res.status(200).render("adminlogin");
+});
+
+admin.post("/adminlogin", async (req,res,next) => {
 
     let { adm_username: username, adm_password: password } = req.body;
     const admin = req.db.collection("admin");
@@ -24,7 +28,7 @@ admin.post("/", async (req,res,next) => {
     password = crypto.createHash("md5").update(password).digest("hex");
 
     let result;
-
+    
     try {
         result = await admin.findOne({ username, password });
     } catch(ex) {
@@ -75,11 +79,12 @@ admin.get("/police", async (req,res) => {
             res.status(200).render("police",{ err: "Cannot Retrieve Police Information" } );
             return;
         }
+        console.log(await result);
         if ( (await result).length === 0 ) {
             res.status(200).render("police",{ noresult: "No officer in Database"} );
             return ;
         }
-
+            
         const gridMeth = gridFs(req);
 
         gridMeth.itereateValues(result, async (policeinfo) => {
@@ -97,8 +102,11 @@ admin.get("/police", async (req,res) => {
 
 admin.post("/police", async (req,res) => {
 
-    if ( req.xhr )
+    if ( req.xhr && ! req.body.casen )
         return policeHandlers.transferPostHandler(req,res);
+
+    if ( req.xhr && req.body.casen )
+        return policeHandlers.assignPostHandler(req,res);
 
     const police = req.db.collection("police.officers");
 
@@ -157,7 +165,7 @@ admin.get("/cases", async ( req, res) => {
 
     try {
 
-        result = await reportedCrimes.find({}).toArray();
+        result = await reportedCrimes.find({}).sort({ $natural: -1 }).toArray();
 
     } catch(ex) {
 
@@ -199,6 +207,36 @@ admin.post("/cases", async (req,res) => {
         return res.status(200).json({ done: true } );
 
     }
+});
+
+
+admin.get("/cases/case_number", async (req,res) => {
+
+    if ( ! req.xhr )
+        return res.status(200).json( { done: false } );
+
+    const reportedCrimes = req.db.collection("reportedcrimes");
+    
+    let { casen } = req.query;
+    let result ;
+
+    try {
+        
+        if ( /^s{0,}$/.test(casen) )
+            casen = null;
+        
+        result = await reportedCrimes.find( { case_number: new RegExp(`^${casen}`) } ).toArray();
+        
+    } catch(ex) {
+        result = ex;
+    } finally {
+        
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).json({ cerr: "cannot connect to db" });
+
+        return res.status(200).json( { result } );
+    }
+    
 });
 
 admin.post("/cases/setstate", async ( req, res) => {
@@ -252,15 +290,13 @@ admin.get("/cases/getmedia", async ( req, res ) => {
         return res.status(200).json({ err: "cannot retrieve information" });
     }
 
-    //const gridMeth = gridFs(req);
-    try {
-        for ( let medias of gridFs.readCasesMedia(result) ) {
-            console.log(medias.name);
-        }
-        
-        return res.status(200).json({});
-    } catch(ex) { console.log(ex) };
+    const gridMeth = gridFs(req);
+    
+    gridMeth.readCasesMedia(result, ({buf,name}) => {
+        console.log("a");
+    });
 
+    console.log("b");
 });
 
 admin.get("/logout", ( req, res ) => {
