@@ -1,0 +1,41 @@
+extends ./admin.pug
+
+block admin-aside2-content
+
+  button(class="add_police_news add_new") Add News
+  
+  div(class="add_police_news_modal add_new_modal" hidden)
+    
+    form(method="POST" enctype="multipart/form-data" class="add_police_news_form add_new_form")
+    
+      div.title_news
+        label.title_label
+          p.required Title
+          input(type="text" placeholder="input news title" name="title" required)
+          
+      div.content_news
+        label.content_label
+          p.required Content
+          textarea(rows="20" cols="70" name="content" required)
+          
+      div(class="btn_handler")
+        button(class="submit" type="submit") Submit
+        button(class="reset" type="reset") Reset
+        button(class="cancel") Cancel
+  
+  div.result
+    - if ( noresult ) {
+      p.badResult= noresult
+    - }
+    
+    if ( result )
+      ul.news_list
+        - result.forEach( res => {
+            li(class="news_item" data_news_num=res.news_count)
+              span.news_item_title Title: #{res.title}
+              button.news_item_delete Delete 
+              p.news_item_date Date: #{res.date}
+              textarea(row="20" cols="70" class="news_item_content" hidden) #{res.content}
+        - })
+      
+  script(src="/js/news.js")
