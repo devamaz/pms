@@ -2,14 +2,14 @@ extends ./admin.pug
 
 block admin-aside2-content
 
-  button(class="add_police") Add Police
+  button(class="add_police add_new") Add Police
 
-  div(class="add_police_modal" hidden)
+  div(class="add_police_modal add_new_modal" hidden)
 
-    form(method="POST" enctype="multipart/form-data" class="add_police_form")
+    form(method="POST" enctype="multipart/form-data" class="add_police_form add_new_form")
 
-      div(class="police_image")
-        div(class="preview-picture")
+      div(class="police_image new_image")
+        div(class="preview_picture")
         label.required.web_cam
           input(type="radio" name="upload_media" value="webcam" required)
           span Web Cam
@@ -18,7 +18,7 @@ block admin-aside2-content
           input(type="radio" name="upload_media" value="file" required)
           span File
 
-      div(class="police_cred")
+      div(class="police_cred new_cred")
 
         div(class="name")
           label.required.firstname
@@ -55,9 +55,8 @@ block admin-aside2-content
         button(class="reset" type="reset") Reset
         button(class="cancel") Cancel
   div.police-officer
-    - const badResult = noresult || err;
-    - if ( badResult ) {
-      p.badResult= badResult
+    - if ( noresult ) {
+      p.badResult= noresult
     - }
     if ( policeinfo )
       ul.police_info
