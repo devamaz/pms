@@ -1,0 +1,23 @@
+.cover {
+    height: 480px;
+    background: black;
+    position: relative;
+    //opacity: .88;
+    margin-top: -480px;
+
+    animation-name: animateCover;
+    animation-timing-function: ease-in-out;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+
+
+
+@keyframes animateCover {
+    @for $i from 1 through 40 {
+        #{$i}% {
+            opacity: unquote(unquote(".") + $i);
+        }
+    }
+}
