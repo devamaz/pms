@@ -1,0 +1,75 @@
+extends ./admin.pug
+
+block admin-aside2-content
+
+  button(class="add_criminal add_new") Add Criminal
+
+  div(class="add_criminal_modal add_new_modal" hidden)
+
+    form(method="POST" enctype="multipart/form-data" class="add_criminal_modal add_new_form")
+
+      div(class="criminal_image new_image")
+        div(class="preview_picture")
+        label.required.web_cam
+          button(class="capture_web_cam") Capture
+
+      div(class="criminal_cred new_cred")
+
+        div.name
+
+          label.required.firstname
+            span Firstname:
+            input(type="text" name="criminal_firstname" required)
+
+          label.required.lastname
+            span Lastname:
+            input(type="text" name="criminal_lastname" required)
+
+        div.info
+
+          label.required.criminalId
+            span Criminal Id
+            input(type="number" name="criminal_id" disabled)
+            button(class="criminal_getId") Generate ID
+
+          label.required.crimeCommitted
+            span Crime
+            select(class="committed_crime" name="committed_crime" required)
+
+          label.required.stations
+            span Station:
+            select(class="station" name="station" required)
+
+          label.required.serviceNo
+            p.service_no_err
+            span Service Number
+            input(type="number" name="service_no")
+
+          label.required.jail_number
+            span Jail Number
+            input(type="text" name="jail_number")
+
+        div.thumb_print
+          label.required.tmb_print
+            span Capture Finger Print
+            div.capture_print
+              p.tmb_print_big_tmb Big Thumb
+            div.capture_print
+              p.tmb_print_middle_tmb Middle Finger
+
+        div(class="btn_handler")
+          button(class="submit" type="submit") Submit
+          button(class="reset" type="reset") Reset
+          button(class="cancel") Cancel
+  div.criminals
+
+    - if ( noresult ) {
+      p.badResult= noresult
+    - }
+
+    - if ( criminals ) {
+
+    - }
+
+
+  script(src="/js/criminal.js")
