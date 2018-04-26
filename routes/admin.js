@@ -2,6 +2,7 @@ const express = require("express");
 const crypto = require("crypto");
 const gridFs = require("../lib/");
 const policeHandlers = require("../lib/police_actions.js");
+const criminalsHandlers = require("../lib/criminal_handler.js");
 const cluster = require("cluster");
 const os = require("os");
 const { ObjectId } = require("mongodb");
@@ -28,7 +29,7 @@ admin.post("/adminlogin", async (req,res,next) => {
     password = crypto.createHash("md5").update(password).digest("hex");
 
     let result;
-    
+
     try {
         result = await admin.findOne({ username, password });
     } catch(ex) {
@@ -84,7 +85,7 @@ admin.get("/police", async (req,res) => {
             res.status(200).render("police",{ noresult: "No officer in Database"} );
             return ;
         }
-            
+
         const gridMeth = gridFs(req);
 
         gridMeth.itereateValues(result, async (policeinfo) => {
@@ -216,27 +217,27 @@ admin.get("/cases/case_number", async (req,res) => {
         return res.status(200).json( { done: false } );
 
     const reportedCrimes = req.db.collection("reportedcrimes");
-    
+
     let { casen } = req.query;
     let result ;
 
     try {
-        
+
         if ( /^s{0,}$/.test(casen) )
             casen = null;
-        
+
         result = await reportedCrimes.find( { case_number: new RegExp(`^${casen}`) } ).toArray();
-        
+
     } catch(ex) {
         result = ex;
     } finally {
-        
+
         if ( Error[Symbol.hasInstance](result) )
             return res.status(200).json({ cerr: "cannot connect to db" });
 
         return res.status(200).json( { result } );
     }
-    
+
 });
 
 admin.post("/cases/setstate", async ( req, res) => {
@@ -291,7 +292,7 @@ admin.get("/cases/getmedia", async ( req, res ) => {
     }
 
     const gridMeth = gridFs(req);
-    
+
     gridMeth.readCasesMedia(result, ({buf,name}) => {
         console.log("a");
     });
