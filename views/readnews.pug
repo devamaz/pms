@@ -1,0 +1,37 @@
+
+extends ./head.pug
+
+append link
+  link(rel="stylesheet" href="/scss/readnews.scss")
+
+block content
+  include nav.pug
+  
+  section#readnews
+    div#news
+      
+      if ( result )
+        ul.news_list
+          - result.forEach( res => {
+               li.news_item
+                 p.news_title= res.title
+                 div(class="news_content" hidden) #{res.content}
+                 p.news_date= res.date
+          - })
+          
+      if ( more )
+      
+        ul.pagination
+        
+          - for ( let i = 1 ; i <= more.length ; i++ ) {
+          
+            - if ( more.current === i ) {
+              li.page.active
+                a(href="/news/" + i)= i
+                - continue 
+            - }
+            
+              li.page
+                a(href="/news/" + i)= i
+            
+          - }
