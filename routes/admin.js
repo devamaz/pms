@@ -135,7 +135,18 @@ admin.post("/police", async (req,res) => {
             return ;
         }
 
-        police.insertOne( { firstName, lastName, serviceNo, dateOfBirth, commencementDate, picture, station, serviceNo , file_id: data._id, assignedTo }, async ( err, result ) => {
+        police.insertOne( {
+            firstName,
+            lastName,
+            serviceNo,
+            dateOfBirth,
+            commencementDate,
+            picture,
+            station,
+            serviceNo ,
+            file_id: data._id,
+            assignedTo
+        }, async ( err, result ) => {
 
             if ( err ) {
                 res.status(200).render("police", { err: "Cannot create police data" } );
@@ -298,6 +309,151 @@ admin.get("/cases/getmedia", async ( req, res ) => {
     });
 
     console.log("b");
+});
+
+
+admin.get("/criminal", async (req,res) => {
+
+    if ( req.xhr ) {
+        return criminalsHandlers.criminalGetHandler(req,res);
+    }
+
+    const criminals = req.db.collection("criminal.criminalinfo");
+
+    let result;
+
+    try {
+        result = await criminals.find({}).toArray();
+    } catch(ex) {
+        result = ex;
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render("criminal", { err: "cannot connect to database" } );
+
+        if ( result.length === 0 )
+            return res.status(200).render("criminal", { noresult: "No criminal recrod in database" } );
+
+        return res.status(200).render("criminal", { criminals: result });
+    }
+
+});
+
+
+admin.post("/criminal", async (req,res) => {
+
+    const criminals = req.db.collection("criminal.criminalinfo");
+
+    const {
+        criminal_firstname: firstName,
+        criminal_lastname: lastName,
+        service_no: officer_in_charge,
+        criminal_id,
+        station,
+        jail_number
+    } = req.body;
+
+    let result;
+
+    try {
+
+        result = await criminals.insert( {
+            firstName,
+            lastName,
+            criminal_id,
+            commited_crimes: [{
+                crime_commited: "",
+                convicted_times: 1,
+                station_info: [{
+                    station,
+                    officer_in_charge,
+                    date_imprisoned: new Date(),
+                    jail_number
+                }]
+            }]
+        });
+
+    } catch(ex) {
+
+        result = ex;
+
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render("criminal", { err: "cannot connect to database" } );
+
+        return res.status(200).redirect("/admin/criminal");
+    }
+});
+
+
+admin.get("/news", async ( req , res ) => {
+    
+    const news = req.db.collection("news");
+
+    let result;
+
+    try {
+        result = await news.find({}).sort( { $natural: -1 } ).toArray();
+    } catch(ex) {
+        result = ex;
+    } finally {
+        
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render("news", { err: "cannot connect to database" });
+
+        if ( result.length === 0 )
+            return res.status(200).render("news", { noresult: "No news in database" });
+
+        return res.status(200).render("news", { result });
+        
+    }
+});
+
+admin.post("/news", async ( req , res ) => {
+
+    const news = req.db.collection("news");
+    const { title, content, date = new Date() } = req.body;
+    
+    let result ;
+
+    try {
+        
+        result = await news.find({}).count();
+        result = await news.insert({ title, content, date, news_count: result });
+        
+    } catch(ex) {
+        
+        result = ex;
+        
+    } finally {
+        
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render("news", { err: "cannot connect to database" });
+
+        return res.status(200).redirect("/admin/news");
+    }
+    
+});
+
+admin.delete("/news", async ( req , res ) => {
+
+    const news = req.db.collection("news");
+    const { delete_num } = req.body;
+    
+    let result, news_count = Number(delete_num);
+    
+    try {
+        result = await news.findOneAndDelete( { news_count } );
+    } catch(ex) {
+        result = ex;
+    } finally {
+        
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).json( { done: false } );
+
+        return res.status(200).json( { done: true } );
+    }
 });
 
 admin.get("/logout", ( req, res ) => {
