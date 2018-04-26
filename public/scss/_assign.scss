@@ -1,0 +1,45 @@
+.assign {
+
+    display: none;
+    background: white;
+    padding: 12px;
+
+    position: absolute;
+    margin-left: -30px;
+    margin-top: -350px;
+
+
+    input[type="text"] {
+        padding: 12px;
+        border-radius: 30px;
+        border: 1px solid black;
+        display: block;
+
+    }
+
+    input[type="button"] {
+        @extend %buttons;
+        margin-top: 10px;
+        &:last-of-type {
+            margin-left: 12px;
+        }
+    }
+}
+
+
+.case_list_n {
+    display: none;
+    position: absolute;
+    background: white;
+    color: black;
+    padding: 12px;
+    top: 90px;
+    width: 170px;
+    .case_item_n {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        &:hover {
+            background: lighten(red,20%);
+        }
+    }
+}

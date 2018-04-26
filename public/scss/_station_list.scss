@@ -1,0 +1,21 @@
+.station_list {
+    position: absolute;
+    background: darken(white,2%);
+    width:100px;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    color: black;
+    font-size: 1.3em;
+
+    .station_item:not(:first-of-type) {
+        margin-top: 5px;
+    }
+
+    .station_item {
+        &:hover {
+            background-color: lighten(red,20%);
+        }
+    }
+}

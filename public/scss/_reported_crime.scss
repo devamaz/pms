@@ -1,0 +1,64 @@
+
+.crime_cases {
+    
+    .crime_case_item {
+        
+        height: 650px;
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 300px;
+        
+        .crime_case_list {
+            
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            margin-left: -20px;
+            line-height: 1.5;
+            border: 3px solid darken(white, 12%);
+            margin-top: 20px;
+            
+            &:not(:first-of-type) {
+                margin-top: 30px;
+            }
+
+            .officers_item {
+                
+                display: inline;
+                
+                &:after {
+                    content: ", ";
+                    color: darken(lightblue,40%);
+                }
+                
+                &:last-of-type:after {
+                    content: "";
+                }
+                
+                a {
+                    color: darken(lightblue,40%);
+                    &:hover {
+                        text-decoration: underline;
+                        font-style: italics;
+                    }
+                }
+
+            }
+            
+            .state {
+                margin-top: 4px;
+                select {
+                    width: 20%;
+                }
+            }
+        }
+    }
+}
+
+
+.reportedBy {
+    font-style: italic;
+    color: darken(lightblue,40%);
+}

@@ -1,0 +1,71 @@
+
+.criminal_image {
+    .capture_web_cam {
+        @extend %buttons;
+        margin-left: 150px;
+    }
+}
+
+.info {
+    [name="criminal_id"] {
+        width: 200px;
+        margin-left: 49px;
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+    .criminal_getId {
+        @extend %buttons;
+        margin-left: 40px;
+    }
+
+    [name="jail_number"] {
+        margin-left: 45px;
+    }
+}
+
+.thumb_print {
+    
+    .capture_print {
+        
+        width: 250px;
+        margin-top: 20px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        background: lighten(darkgrey,23%);
+        
+        &:first-of-type {
+            float: left;
+        }
+        &:last-of-type {
+            float: right;
+            margin-top: 3px;
+        }
+        > p {
+            align-self: center;
+            font-size: 1.5em;
+            color: lighten(darkgrey,5%);
+        }
+    }
+
+}
+
+.crimeCommitted {
+    select {
+        margin-left: 80px;
+        width: 365px;
+        background: white;
+    }
+}
+
+.service_no_err {
+    text-align: center;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.btn_handler {
+    clear: both;
+    margin-left: 150px;
+}
