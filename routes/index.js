@@ -75,4 +75,31 @@ index.get("/news/:section", async ( req , res ) => {
 
 });
 
+index.get("/readnews", async ( req ,res ) => {
+    
+    if ( ! req.xhr )
+        return res.status(200).render("readnews", { err: "none xhr request" });
+    
+    const news = req.db.collection("news");
+    const news_count = Number(req.query.news_id);
+
+    let result ;
+
+    try {
+        result = await news.findOne({ news_count });
+    } catch(ex) {
+        result = ex;
+    } finally {
+        
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).json( { err: "Cannot connect to database" } );
+
+        if ( ! result )
+            return res.status(200).json({ err: `news id of ${news_count} not found` });
+
+        return res.status(200).json( { result } );
+    }
+    
+});
+
 module.exports = index;
