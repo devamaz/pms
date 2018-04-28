@@ -13,9 +13,8 @@ block content
       if ( result )
         ul.news_list
           - result.forEach( res => {
-               li.news_item
+               li(class="news_item" data-id=res.news_count)
                  p.news_title= res.title
-                 div(class="news_content" hidden) #{res.content}
                  p.news_date= res.date
           - })
           
@@ -35,3 +34,9 @@ block content
                 a(href="/news/" + i)= i
             
           - }
+  div(class="news_content" hidden)
+    p.close X
+    p.title
+    p.content
+  
+  script(src="/js/readnews.js")
