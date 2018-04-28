@@ -54,3 +54,36 @@ body {
         }
     }
 }
+
+.news_content {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: white;
+    padding-top: 30px;
+    padding-left: 10px;
+    .close {
+        float: right;
+        margin-right: 20px;
+        background: lighten(red,20%);
+        padding: 12px;
+        border-radius: 50%;
+        color: white;
+        cursor: pointer;
+        &:hover {
+            background: red;
+        }
+    }
+    .title {
+        clear: right;
+    }
+    .content {
+        margin-top: 30px;
+    }
+    .title,.content {
+        text-align: center;
+        font-family: monospace;
+        font-size: 1.5em;
+    }
+}
