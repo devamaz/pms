@@ -8,14 +8,19 @@
     const btnPolice = document.querySelector(".police_info");
 
     const buildScript = () => {
+        
         let checkScriptStatus = document.querySelector("[__added__script=true]");
+        
         if ( checkScriptStatus )
             checkScriptStatus.remove();
 
         const script = document.createElement("script");
-        script.src = "/js/preview-image.js";
+        
         script.setAttribute("__added__script", "true");
+
+        script.src = "/js/preview-image.js";
         document.body.appendChild(script);
+        
     };
 
     const buildFileInput = () => {
@@ -191,7 +196,7 @@
                     parentNode.remove();
 
                     const allPolice = document.querySelectorAll(".police_info_list");
-                    
+
                     if ( allPolice.length === 0 )  {
                         location.assign("/admin/police");
                     }
@@ -218,20 +223,20 @@
 
                                 if ( ! gen.next(done).value ) return ;
 
-                                const { stations: [ { station: stations } ] } = JSON.parse(xhr.responseText);
+                                const { stations } = JSON.parse(xhr.responseText);
                                 const stationList = parentNode.querySelector(".station_list");
 
                                 if ( stationList.childElementCount !== 0 ) {
                                     stationList.hidden = false;
                                     return ;
                                 }
-
+                                
                                 stations.forEach( station => {
                                     const li = document.createElement("li");
                                     li.setAttribute("class", "station_item");
-                                    li.setAttribute("__station", station);
+                                    li.setAttribute("__station", station.station_id);
                                     li.addEventListener("click", evt => transferToStation(evt,parentNode));
-                                    li.textContent = station;
+                                    li.textContent = station.station_id;
                                     stationList.appendChild(li);
                                 });
 
