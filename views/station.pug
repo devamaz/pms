@@ -1,0 +1,49 @@
+extends ./admin.pug
+
+block admin-aside2-content
+
+  button(class="add_station add_new") Add Station
+
+  div(class="add_station_modal add_new_modal" hidden)
+
+    form(method="POST" enctype="multipart/form-data" class="add_station_form add_new_form")
+
+      div(class="station_cred new_cred")
+
+        label.required.stationname
+          span Station Name:
+          input(type="text" name="station_name" required)
+
+        label.required.stationaddress
+          span Station Address:
+          input(type="text" name="station_address" required)
+
+        label.required.stationid
+          span Station ID:
+          input(type="text" name="station_id" required)
+
+      div(class="btn_handler")
+        button(class="submit" type="submit") Submit
+        button(class="reset" type="reset") Reset
+        button(class="cancel") Cancel
+
+  div.stations
+
+    - if ( noresult ) {
+      p.badResult= noresult
+    - }
+
+    ul.station-list
+
+      - if ( result ) {
+
+        - result.forEach( res => {
+          li.station-item
+            p.station-name Divsion: #{res.station_name}
+            p.station-address Address: #{res.station_address}
+            p.station-id Station  ID: #{res.station_id}
+        - })
+
+      - }
+
+  script(src="/js/station.js")
