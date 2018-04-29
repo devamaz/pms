@@ -1,13 +1,17 @@
 .station_list {
+    
     position: absolute;
     background: darken(white,2%);
-    width:100px;
+    width:20%;
+    height: 500px;
     border-radius: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
 
     color: black;
     font-size: 1.3em;
+
+    overflow-y: auto;
 
     .station_item:not(:first-of-type) {
         margin-top: 5px;
