@@ -1,0 +1,28 @@
+form.add_station_form {
+    height: 300px;
+    input[name="station_name"] {
+        margin-left: 33px;
+    }
+    input[name="station_id"] {
+        margin-left: 55px;
+    }
+    .btn_handler {
+        margin-right: 65px;
+    }
+}
+
+
+.station-list {
+    clear: both;
+    margin-left: -50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 550px;
+    overflow-y: auto;
+    .station-item {
+        margin-top: 10px;
+        padding: 12px;
+        line-height: 1.5;
+        box-shadow: 0px 0px 2px 2px darkgrey;
+    }
+}
