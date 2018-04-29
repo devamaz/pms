@@ -9,7 +9,7 @@ block admin-aside2-content
     form(method="POST" enctype="multipart/form-data" class="add_police_form add_new_form")
 
       div(class="police_image new_image")
-        div(class="preview_picture")
+        div(class="preview-picture")
         label.required.web_cam
           input(type="radio" name="upload_media" value="webcam" required)
           span Web Cam
@@ -45,15 +45,15 @@ block admin-aside2-content
           label.required.stations
             span Stations:
             select(class="station" name="station" required)
-              option Kwewe
-              option Kaka
-              option Tiki
-              option Ynawa
+              if ( stations_result )
+                each station in stations_result
+                  option= station.station_name
 
       div(class="btn_handler")
         button(class="submit" type="submit") Submit
         button(class="reset" type="reset") Reset
         button(class="cancel") Cancel
+        
   div.police-officer
     - if ( noresult ) {
       p.badResult= noresult
@@ -66,7 +66,7 @@ block admin-aside2-content
             p.name #{police.firstName} #{police.lastName}
             p(class="service_no" __value-data=police.serviceNo) Service Number #{police.serviceNo}
             p.dob= police.dateOfbirth
-            p.station= police.station + " police station"
+            p.station= police.station.station_name + " police station"
             - const caseLength = police.assignedTo.length;
             p.numberOfCases= "Handled " + (caseLength > 0 ? caseLength : 0 ) + " criminal case"
             div.ctrlbtn
