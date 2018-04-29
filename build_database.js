@@ -95,7 +95,9 @@ db.police.officers.insert({
 });
 
 db.police.stations.insert({
-    station: Array()
+    station_name: String(),
+    station_address: String(),
+    station_id: String()
 });
 
 db.criminal.criminalinfo.insert({
@@ -126,6 +128,7 @@ db.reportedcrimes.createIndex({ case_number: 1 }, { unique: true } );
 db.users.createIndex({ username: 1, bvn: 1 }, { unique: true });
 db.crimemedia.createIndex( { _crime_id: 1 } , { unique: true });
 db.police.officers.createIndex( { serviceNo: 1 }, { unique: true } );
+db.police.stations.createIndex( { station_id: 1 }, { unique: true } );
 db.criminal.criminalinfo.createIndex( { criminal_id: 1 }, { unique: true } );
 //db.police.createIndex( { firstName: 1, lastName: 1 } );
 
@@ -135,3 +138,4 @@ db.reportedcrimes.remove({ state: "" });
 db.crimemedia.remove({ _crime_id: { $exists: true }});
 db.criminal.criminalinfo.remove({ criminal_id: "" });
 db.news.remove({title: ""});
+db.police.stations.remove( { station_address: "" } );
