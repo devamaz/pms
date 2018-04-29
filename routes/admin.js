@@ -70,31 +70,34 @@ admin.get("/police", async (req,res) => {
         return policeHandlers.transferGetHandler(req,res);
 
     const police = req.db.collection("police.officers");
-    let result;
+    const stations = req.db.collection("police.stations");
+    
+    let police_result, stations_result, result ;
+    
     try {
-        result = (await police.find({ }, { _id: 0 })).toArray();
+        
+        result = police_result = await police.find({ }, { _id: 0 }).toArray();
+        result = stations_result = await stations.find( { }, { _id: 0, station_address: 0}).toArray();
+        
     } catch(ex) {
         result = ex;
     } finally {
-        if ( Error[Symbol.hasInstance](result) ) {
-            res.status(200).render("police",{ err: "Cannot Retrieve Police Information" } );
-            return;
-        }
-        console.log(await result);
-        if ( (await result).length === 0 ) {
-            res.status(200).render("police",{ noresult: "No officer in Database"} );
-            return ;
-        }
+        
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render("police",{ err: "Cannot Retrieve Police Information" } );
+
+        if ( ! police_result.length )
+            return res.status(200).render("police",{ noresult: "No officer in Database"} );
+
+        if ( ! stations_result.length )
+            return res.status(200).render("police", { noresult: "Create a police station to continue" } );
 
         const gridMeth = gridFs(req);
-
-        gridMeth.itereateValues(result, async (policeinfo) => {
+        
+        gridMeth.itereateValues(police_result, async (policeinfo) => {
             policeinfo = await policeinfo;
-            res.status(200).render("police", { policeinfo });
-            return;
+            res.status(200).render("police", { policeinfo, stations_result } );
         });
-
-
     }
 
 
@@ -388,7 +391,7 @@ admin.post("/criminal", async (req,res) => {
 
 
 admin.get("/news", async ( req , res ) => {
-    
+
     const news = req.db.collection("news");
 
     let result;
@@ -398,7 +401,7 @@ admin.get("/news", async ( req , res ) => {
     } catch(ex) {
         result = ex;
     } finally {
-        
+
         if ( Error[Symbol.hasInstance](result) )
             return res.status(200).render("news", { err: "cannot connect to database" });
 
@@ -406,7 +409,7 @@ admin.get("/news", async ( req , res ) => {
             return res.status(200).render("news", { noresult: "No news in database" });
 
         return res.status(200).render("news", { result });
-        
+
     }
 });
 
@@ -414,45 +417,89 @@ admin.post("/news", async ( req , res ) => {
 
     const news = req.db.collection("news");
     const { title, content, date = new Date() } = req.body;
-    
+
     let result ;
 
     try {
-        
+
         result = await news.find({}).count();
         result = await news.insert({ title, content, date, news_count: result });
-        
+
     } catch(ex) {
-        
+
         result = ex;
-        
+
     } finally {
-        
+
         if ( Error[Symbol.hasInstance](result) )
             return res.status(200).render("news", { err: "cannot connect to database" });
 
         return res.status(200).redirect("/admin/news");
     }
-    
+
 });
 
 admin.delete("/news", async ( req , res ) => {
 
     const news = req.db.collection("news");
     const { delete_num } = req.body;
-    
+
     let result, news_count = Number(delete_num);
-    
+
     try {
         result = await news.findOneAndDelete( { news_count } );
     } catch(ex) {
         result = ex;
     } finally {
-        
+
         if ( Error[Symbol.hasInstance](result) )
             return res.status(200).json( { done: false } );
 
         return res.status(200).json( { done: true } );
+    }
+});
+
+admin.get("/station", async ( req , res ) => {
+
+    const stations = req.db.collection("police.stations");
+
+    let result ;
+
+    try {
+        result = await stations.find({}).toArray();
+    } catch(ex) {
+        result = ex;
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render( "station" , { err: "error connecting to database" } );
+
+        if ( result.length === 0 )
+            return res.status(200).render( "station" , { noresult: "No stations in database" });
+        
+        return res.status(200).render( "station", { result } );
+
+    }
+
+});
+
+admin.post("/station", async ( req , res ) => {
+
+    const stations = req.db.collection("police.stations");
+    const { station_name, station_address, station_id } = req.body;
+
+    let result ;
+
+    try {
+        result = await stations.insert({ station_name , station_address, station_id });
+    } catch(ex) {
+        result = ex;
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).render( "station" , { err: "error creating police station" } );
+
+        return res.status(200).redirect("/admin/station");
     }
 });
 
