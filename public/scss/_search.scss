@@ -1,0 +1,21 @@
+input[name="search"] {
+    @extend %input;
+    width: 300px;
+    margin-top: 30px;
+    margin-left: 250px;
+}
+
+select[name="search_type"] {
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    margin-left: 20px;
+}
+
+.start_search {
+    @extend %buttons;
+    display: block;
+    position: absolute;
+    margin-left:400px;
+    margin-top: 15px;
+}

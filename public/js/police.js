@@ -6,21 +6,22 @@
     const closeModal = document.querySelector(".cancel");
     const policeImage = document.querySelector(".police_image");
     const btnPolice = document.querySelector(".police_info");
+    const startSearch = document.querySelector(".start_search");
 
     const buildScript = () => {
-        
+
         let checkScriptStatus = document.querySelector("[__added__script=true]");
-        
+
         if ( checkScriptStatus )
             checkScriptStatus.remove();
 
         const script = document.createElement("script");
-        
+
         script.setAttribute("__added__script", "true");
 
         script.src = "/js/preview-image.js";
         document.body.appendChild(script);
-        
+
     };
 
     const buildFileInput = () => {
@@ -152,6 +153,7 @@
         xhr.send(null);
     };
 
+
     const handlePoliceBtn = Object.defineProperties( {}, {
         __serviceNumber: {
             value(parentNode) {
@@ -230,7 +232,7 @@
                                     stationList.hidden = false;
                                     return ;
                                 }
-                                
+
                                 stations.forEach( station => {
                                     const li = document.createElement("li");
                                     li.setAttribute("class", "station_item");
@@ -312,6 +314,84 @@
         xhr.send(data);
     };
 
+    const handleSearch = evt => {
+
+        evt.preventDefault();
+        
+        let search_type = document.querySelector("select[name='search_type']").value;
+        const search_text = document.querySelector("input[name='search']").value;
+        const xhr = new XMLHttpRequest();
+
+        switch ( search_type ) {
+        case "Name": search_type = "firstName"; break;
+        case "Station": search_type = "station.station_name"; break;
+        case "ServiceNumber": search_type = "serviceNo"; break;
+        default: ;
+        }
+
+        xhr.open("GET", `/admin/police/search?search_type=${search_type}&search_str=${search_text}`, true );
+
+        xhr.addEventListener("readystatechange", evt => {
+            
+            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+                
+                const { noresult , err, policeinfo } = JSON.parse(xhr.responseText);
+                let message ;
+                
+                if ( noresult || ( message = err ) ) {
+                    document.querySelector(".err").textContent = message || "No result found";
+                    return; 
+                }
+                
+                const policeInfo = document.querySelector(".police_info");
+                const policeList = Array.prototype.slice.call(document.querySelectorAll("li.police_info_list"));
+
+                Array.from(policeList, el => {
+                    el.remove();
+                });
+
+
+                
+                policeinfo.forEach( police => {
+                    
+                    const clonePoliceNode = policeList.pop().cloneNode(true);
+
+                    const imageDiv = clonePoliceNode.querySelector(".image-preview");
+                    const name = clonePoliceNode.querySelector(".name");
+                    const serviceNo = clonePoliceNode.querySelector(".service_no");
+                    const dob = clonePoliceNode.querySelector(".dob");
+                    const station = clonePoliceNode.querySelector(".station");
+                    const nCases = clonePoliceNode.querySelector(".numberOfCases");
+
+                    const caseLength = police.assignedTo.length;
+                    
+                    imageDiv.style.background = "url(data:image/jpeg;base64," + police.picture_data + ") center no-repeat; " + "background-size: cover;";
+                    name.textContent = `${police.firstName} ${police.lastName}`;
+
+                    serviceNo.setAttribute("__value-data", police.serviceNo);
+                    serviceNo.textContent = `Service Number ${police.serviceNo}`;
+                    
+                    dob.textContent = police.dateOfBirth;
+                    station.textContent = `${police.station.station_name} police station`;
+                    
+                    nCases.textContent = `Handled ${(caseLength > 0 ? caseLength: 0 )} criminal case`;
+                    
+                    policeInfo.appendChild(clonePoliceNode);
+
+                    console.log(police);
+                    
+                });
+                
+                return ;
+            }
+        });
+
+        xhr.setRequestHeader("X-Requested-With", "XMLHttprequest");
+
+        xhr.send(null);
+
+    };
+
     Array.prototype.slice.call(policeImage_capture)
         .forEach ( x => {
             x.addEventListener("click", evt => {
@@ -337,6 +417,8 @@
         const policeModal = document.querySelector(".add_police_modal");
         policeModal.hidden = true;
     });
+
+    startSearch.addEventListener("click", handleSearch);
 
     btnPolice.addEventListener("click", evt => {
 

@@ -1,7 +1,13 @@
 extends ./admin.pug
 
 block admin-aside2-content
-
+  
+  input(type="text" name="search" placeholder="search string")
+  select(name="search_type")
+    option ServiceNumber
+    option Station
+    option Name
+  button(class="start_search") Search
   button(class="add_police add_new") Add Police
 
   div(class="add_police_modal add_new_modal" hidden)

@@ -71,18 +71,18 @@ admin.get("/police", async (req,res) => {
 
     const police = req.db.collection("police.officers");
     const stations = req.db.collection("police.stations");
-    
+
     let police_result, stations_result, result ;
-    
+
     try {
-        
+
         result = police_result = await police.find({ }, { _id: 0 }).toArray();
         result = stations_result = await stations.find( { }, { _id: 0, station_address: 0}).toArray();
-        
+
     } catch(ex) {
         result = ex;
     } finally {
-        
+
         if ( Error[Symbol.hasInstance](result) )
             return res.status(200).render("police",{ err: "Cannot Retrieve Police Information" } );
 
@@ -91,9 +91,9 @@ admin.get("/police", async (req,res) => {
 
         if ( ! stations_result.length )
             return res.status(200).render("police", { noresult: "Create a police station to continue" } );
-
-        const gridMeth = gridFs(req);
         
+        const gridMeth = gridFs(req);
+
         gridMeth.itereateValues(police_result, async (policeinfo) => {
             policeinfo = await policeinfo;
             res.status(200).render("police", { policeinfo, stations_result } );
@@ -101,6 +101,39 @@ admin.get("/police", async (req,res) => {
     }
 
 
+});
+
+admin.get("/police/search",  async ( req, res ) => {
+
+    const police = req.db.collection("police.officers");
+    const { search_type, search_str } = req.query;
+    const regex = new RegExp(`${search_str}`, "g");
+    console.log(regex, search_type, search_str);
+    let result;
+
+    try {
+
+        if ( search_type === "firstName" )
+            result = await police.find( { $or: [ { firstName: regex }, { lastName: regex } ] }).toArray();
+        else
+            result = await police.find( { [search_type]: regex } ).toArray();
+
+    } catch(ex) {
+        result = ex;
+    } finally {
+
+        if ( Error[Symbol.hasInstance](result) )
+            return res.status(200).json( { err: "error connecting to database" } );
+
+        if ( result.length === 0 )
+            return res.status(200).json( { noresult: "no search found" } );
+
+        const gridMeth = gridFs(req);
+        gridMeth.itereateValues(result, async (policeinfo) => {
+            policeinfo = await policeinfo;
+            res.status(200).json({ policeinfo });
+        });
+    }
 });
 
 
@@ -476,7 +509,7 @@ admin.get("/station", async ( req , res ) => {
 
         if ( result.length === 0 )
             return res.status(200).render( "station" , { noresult: "No stations in database" });
-        
+
         return res.status(200).render( "station", { result } );
 
     }
